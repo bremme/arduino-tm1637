@@ -1,0 +1,38 @@
+#######################################
+# Syntax Coloring Map For SevenSegmentTM1637
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+SevenSegmentTM1637  KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+Write             KEYWORD2
+begin             KEYWORD2
+clear             KEYWORD2
+home              KEYWORD2
+on                KEYWORD2
+off               KEYWORD2
+printTime         KEYWORD2
+printDualCounter  KEYWORD2
+blink             KEYWORD2
+setBacklight      KEYWORD2
+setContrast       KEYWORD2
+setCursor         KEYWORD2
+setColonOn        KEYWORD2
+getColonOn        KEYWORD2
+setPrintDelay     KEYWORD2
+encodeChar        KEYWORD2
+encodeDigit       KEYWORD2
+shiftLeft         KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+SENSOR_DEFAULT      LITERAL1
