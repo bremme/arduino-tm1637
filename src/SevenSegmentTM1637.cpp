@@ -1,6 +1,7 @@
 
 #include "SevenSegmentTM1637.h"
 
+// store an ASCII Map in PROGMEM (Flash memory)
 const PROGMEM uint8_t asciiMap[96] = {
   TM1637_CHAR_SPACE,
   TM1637_CHAR_EXC,
@@ -109,13 +110,14 @@ SevenSegmentTM1637::SevenSegmentTM1637(uint8_t pinClk, uint8_t pinDIO) :
   pinAsOutput(_pinDIO);
   digitalHigh(_pinClk);
   digitalHigh(_pinDIO);
+
   // setup defaults
   setCursor(0, TM1637_DEFAULT_CURSOR_POS);
   setPrintDelay(TM1637_DEFAULT_PRINT_DELAY);
   setColonOn(TM1637_DEFAULT_COLON_ON);
   setBacklight(TM1637_DEFAULT_BACKLIGHT);
 
-  // write command SET_DATA   (Command1)
+  // write command SET_DATA   (Command1) Defaults
   command(
     TM1637_COM_SET_DATA |
     TM1637_SET_DATA_WRITE |
@@ -123,39 +125,24 @@ SevenSegmentTM1637::SevenSegmentTM1637(uint8_t pinClk, uint8_t pinDIO) :
     TM1537_SET_DATA_M_NORM
   );
 
-  // fill bufer with all On
-  // uint8_t allSegmentsOn[4] = {255, 255, 255, 255};
-  // memcpy(_printBuffer, allSegmentsOn, 4);
+
 
 };
 
-// Print API
+// Print API ///////////////////////////////////////////////////////////////////
+// single byte
 size_t  SevenSegmentTM1637::write(uint8_t byte) {
-  Serial.println("w uint8_t byte");
-  Serial.print("cursor:\t"); Serial.println(_cursorPos);
-  // if ( _cursorPos < TM1637_MAX_COLOM ) {
-  //   _printBuffer[_cursorPos] = encode( (char)byte );
-  //   writeRawBytes(&_printBuffer[_cursorPos], 1, _cursorPos);
-  // } else {
-  //   // set position to max -> stay in else state if more bytes are comming
-  //   _cursorPos = TM1637_MAX_COLOM - 1;
-  //   shiftLeft(_printBuffer,TM1637_MAX_COLOM);
-  //   _printBuffer[_cursorPos] = encode( (char)byte );
-  //   writeRawBytes(_printBuffer, TM1637_MAX_COLOM, 0);
-  // }
-  // _cursorPos++;   // incrase counter
 
-  static uint8_t printBuffer[4] = {0, };
 
   if ( _cursorPos == _numCols ) {
-    shiftLeft(printBuffer, _numCols);
-    printBuffer[_cursorPos] = encode( (char)byte );
-    printRaw( printBuffer, _numCols, 0);
+    shiftLeft(_rawBuffer, _numCols);
+    _rawBuffer[_cursorPos] = encode( (char)byte );
+    printRaw( _rawBuffer, _numCols, 0);
   };
 
   if (_cursorPos < _numCols) {
-    printBuffer[_cursorPos] = encode( (char)byte );
-    printRaw( printBuffer, _cursorPos+1, 0);
+    _rawBuffer[_cursorPos] = encode( (char)byte );
+    printRaw( _rawBuffer, _cursorPos+1, 0);
     setCursor(1, _cursorPos + 1);
   };
 
@@ -163,9 +150,7 @@ size_t  SevenSegmentTM1637::write(uint8_t byte) {
 
 // null terminated char array
 size_t  SevenSegmentTM1637::write(const char* str) {
-  Serial.println("w const char*");
-  // size_t l = encode(_printBuffer, str, TM1637_PRINT_BUFFER_SIZE);
-  // writeRawBytes(_printBuffer, l, _cursorPos);
+
   uint8_t encodedBytes[4];
 
   encode(encodedBytes, str, 4);
@@ -179,149 +164,21 @@ size_t  SevenSegmentTM1637::write(const char* str) {
       break;
     }
   }
-
-
-
 };
 
 // byte array with length
 size_t  SevenSegmentTM1637::write(const uint8_t* buffer, size_t size) {
-  Serial.println("w const uint8_t* buffer, size_t size");
-  // if ( size > TM1637_PRINT_BUFFER_SIZE ) {
-  //   size = TM1637_PRINT_BUFFER_SIZE;
-  // }
-  // for (uint8_t i=0; i < size; i++) {
-  //   _printBuffer[i] = encode( (char)buffer[i] );
-  // };
-  //
-  // writeRawBytes(_printBuffer, (uint8_t)size, _cursorPos);
-
-
-  // uint8_t encodedBytes[4];
-  // encode(encodedBytes, buffer, 4);
-  //
-  // for (uint8_t i=4; i < size; i++) {
-  //   printRaw(encodedBytes);
-  //   shiftLeft(encodedBytes, 4);
-  //   encodedBytes[3] = encode(buffer[i]);
-  //   delay(_printDelay);
-  // };
 
   uint8_t encodedBytes[TM1637_MAX_CHARS];
+
   if ( size > TM1637_MAX_CHARS) {
     size = TM1637_MAX_CHARS;
   }
   size_t length = encode(encodedBytes, buffer, size);
   printRaw(encodedBytes,length);
 
-  // for (uint8_t i=4; i < size; i++) {
-  //   printRaw(encodedBytes);
-  //   shiftLeft(encodedBytes, 4);
-  //   encodedBytes[3] = encode(buffer[i]);
-  //   delay(_printDelay);
-  // };
-  //
-  // TM1637_MAX_CHARS
 
 };
-
-void  SevenSegmentTM1637::printRaw(uint8_t rawByte, uint8_t position) {
-  uint8_t cmd[2];
-  cmd[0] = TM1637_COM_SET_ADR | position;
-  cmd[1] = rawByte;
-  command(cmd, 2);
-};
-
-void  SevenSegmentTM1637::printRaw(const uint8_t* rawBytes, size_t length, uint8_t position) {
-
-  // if fits on display
-  if ( (length + position) <= _numCols) {
-    uint8_t cmd[5] = {0, };
-    cmd[0] = TM1637_COM_SET_ADR | (position & B111);  // sets address
-    memcpy(&cmd[position+1], rawBytes, length);       // copy bytes
-    cmd[2] |= (_colonBit)?TM1637_COLON_BIT:0;         // set colon bit
-    command(cmd, length+1);                           // send to display
-  }
-  // does not fit on display, need to print with delay
-  else {
-    // First print 1-4 characters
-    uint8_t numtoPrint = _numCols - position;
-    printRaw(rawBytes, numtoPrint, position);
-    delay(_printDelay);
-
-    uint8_t remaining = length - numtoPrint + 3;
-    uint8_t i         = 1;
-    while( remaining >= _numCols) {
-      printRaw(&rawBytes[i], _numCols, 0);
-      delay(_printDelay);
-      remaining--;
-      i++;
-    };
-  }
-
-};
-
-void  SevenSegmentTM1637::writeRawBytes(const uint8_t* rawBytes, uint8_t length, uint8_t position) {
-
-  static bool longFlag = false;
-
-  // if writing more than 4 bytes
-  if ( length > 4 ) {
-    uint8_t remaining = length;
-    uint8_t i=0;
-    longFlag = true;
-    while ( remaining > 4) {
-      writeRawBytes( &rawBytes[i], 4, 0);
-      delay(_printDelay);
-      remaining -= 1;
-      i++;
-    };
-    // renter this function with only 4 bytes
-    writeRawBytes( &rawBytes[i], 4, 0);
-
-    longFlag = false;
-    return;   // where done return
-  };
-
-  uint8_t addr =     TM1637_COM_SET_ADR; //| (position & B111);
-
-  uint8_t buffer[length+1];
-  buffer[0] = addr;
-  for (uint8_t i=0; i < length; i++) {
-    buffer[i+1] = rawBytes[i];
-  }
-  command(buffer, length+1);
-
-  // // Write command SET_ADDR       (Command2)
-  // i2cStart();
-  // i2cWriteByte(
-  //   TM1637_COM_SET_ADR |
-  //   (position & B111)
-  // );
-  // i2cAck();
-  // TM1637_DEBUG_PRINT(F("Write SET_ADDR:\t")); TM1637_DEBUG_PRINTLN((
-  //   TM1637_COM_SET_ADR |
-  //   (position & B111)
-  // ), BIN);
-
-  // Write DATA                   (DATA1..DATAN)
-  // for( uint8_t i=0; i < length; i++ ) {
-  //   i2cWriteByte( rawBytes[i] | _colonBit );
-  //   i2cAck();
-  //   TM1637_DEBUG_PRINT(F("Write DATA:\t")); TM1637_DEBUG_PRINTLN( rawBytes[i], BIN);
-  // };
-  // i2cStop();
-
-  // Write command SET_DISPLAY    (Command3)
-  // i2cStart();
-  // i2cWriteByte(
-  //   TM1637_COM_SET_DISPLAY |
-  //   ( _displayCmd & B00001111)
-  // );
-  // i2cAck();
-  // i2cStop();
-
-}
 
 // Liquid cristal API
 void SevenSegmentTM1637::begin(uint8_t cols, uint8_t rows) {
@@ -409,70 +266,6 @@ void SevenSegmentTM1637::off(void) {
 };
 
 // SevenSegmentTM1637 public methods
-void SevenSegmentTM1637::printTime(uint8_t hour, uint8_t min, bool blink) {
-
-  static bool displayDots = true;
-
-  if ( blink ) {
-    displayDots = true;
-  } else {
-    displayDots = !displayDots;
-  }
-
-  _printBuffer[0] = encode(uint8_t(hour / 10));
-  _printBuffer[1] = (displayDots)?(encode( uint8_t(hour % 10)) | TM1637_COLON_BIT):encode(uint8_t(hour % 10));
-  _printBuffer[2] = encode(uint8_t(min / 10));
-  _printBuffer[3] = encode(uint8_t(min % 10));
-  writeRawBytes(_printBuffer, 4, 0);
-
-  if ( blink ) {
-    _printBuffer[1] &= ( _printBuffer[1] & B01111111 );
-    delay(TM1637_DEFAULT_BLINK_DELAY);
-    writeRawBytes( &_printBuffer[1], 1, 1);
-  };
-
-};
-
-void SevenSegmentTM1637::printTime(uint16_t t, bool blink) {
-  uint8_t hour = t / 100;
-  t -= (hour * 100);
-  uint8_t min  = t;
-  printTime(hour, min);
-};
-
-// positive counter 0..99, negative counter 0..-9
-void SevenSegmentTM1637::printDualCounter(int8_t leftCounter, int8_t rightCounter) {
-
-  leftCounter = (leftCounter > 99)?99:leftCounter;
-  rightCounter = (rightCounter > 99)?99:rightCounter;
-
-  // get current state
-  bool colonOn = getColonOn();
-  uint8_t zeroByte[1] = {0};
-
-  setColonOn(true);
-
-  setCursor(0,0);
-  print(leftCounter);
-
-  if ( leftCounter < 10 && leftCounter > 0) {
-    // to display colon
-    writeRawBytes(zeroByte,1,1);
-  };
-
-  // clear most left byte if only single digit
-  if ( rightCounter < 10 && rightCounter > 0) {
-    writeRawBytes(zeroByte,1,2);
-    setCursor(0,3);
-  } else {
-    setCursor(0,2);
-  }
-  print(rightCounter);
-
-  // set to previous state
-  setColonOn(colonOn);
-}
-
 void  SevenSegmentTM1637::blink(uint8_t blinkDelay, uint8_t repeats) {
   for (uint8_t i=0; i < repeats; i++) {
     setBacklight(0);                    // turn backlight off
@@ -487,16 +280,50 @@ void  SevenSegmentTM1637::setPrintDelay(uint16_t printDelay) {
 };
 
 bool  SevenSegmentTM1637::getColonOn(void) {
-  return ( _colonBit > 0 );
+  return (_colonOn);
 };
 
 void  SevenSegmentTM1637::setColonOn(bool setToOn) {
-  if (setToOn) {
-    _colonBit = TM1637_COLON_BIT;
-  } else {
-    _colonBit = 0;
-  }
+    _colonOn = setToOn;
 }
+void  SevenSegmentTM1637::printRaw(uint8_t rawByte, uint8_t position) {
+  uint8_t cmd[2];
+  cmd[0] = TM1637_COM_SET_ADR | position;
+  cmd[1] = rawByte;
+  if (position == 1) { cmd[1]|=TM1637_COLON_BIT; };
+  command(cmd, 2);
+};
+
+void  SevenSegmentTM1637::printRaw(const uint8_t* rawBytes, size_t length, uint8_t position) {
+
+  // if fits on display
+  if ( (length + position) <= _numCols) {
+    uint8_t cmd[5] = {0, };
+    cmd[0] = TM1637_COM_SET_ADR | (position & B111);  // sets address
+    memcpy(&cmd[position+1], rawBytes, length);       // copy bytes
+    cmd[2] |= (_colonOn)?TM1637_COLON_BIT:0;          // set colon bit
+    command(cmd, length+1);                           // send to display
+  }
+  // does not fit on display, need to print with delay
+  else {
+    // First print 1-4 characters
+    uint8_t numtoPrint = _numCols - position;
+    printRaw(rawBytes, numtoPrint, position);
+    delay(_printDelay);
+
+    // keep printing 4 characters till done
+    uint8_t remaining = length - numtoPrint + 3;
+    uint8_t i         = 1;
+    while( remaining >= _numCols) {
+      printRaw(&rawBytes[i], _numCols, 0);
+      delay(_printDelay);
+      remaining--;
+      i++;
+    };
+  }
+
+};
+
 
 // Helpers
 uint8_t SevenSegmentTM1637::encode(char c) {
@@ -526,10 +353,10 @@ size_t  SevenSegmentTM1637::encode(uint8_t* buffer, const char* str, size_t buff
   return i;
 }
 
-size_t  SevenSegmentTM1637::encode(uint8_t* buffer, const uint8_t* byteArr, size_t arrSize) {
+size_t  SevenSegmentTM1637::encode(uint8_t* buffer, const uint8_t* byteArr, size_t bufferSize) {
   size_t i;
 
-  for (i=0; i < arrSize; i++) {
+  for (i=0; i < bufferSize; i++) {
     buffer[i] = encode( (char)byteArr[i] );
   };
   return i;
@@ -543,30 +370,38 @@ void    SevenSegmentTM1637::shiftLeft(uint8_t* buffer, size_t length) {
 
 // SevenSegmentTM1637 LOW LEVEL
 bool    SevenSegmentTM1637::command(uint8_t cmd) const{
-  i2cStart();
-  i2cWriteByte(cmd);
-  bool acknowledged = i2cAck();
-  i2cStop();
-  return acknowledged;
+  return command(_pinClk, _pinDIO, cmd);
 };
 
-bool    SevenSegmentTM1637::command(const uint8_t* command, uint8_t length) const {
+bool    SevenSegmentTM1637::command(uint8_t pinClk, uint8_t pinDIO, uint8_t cmd) {
+  comStart(pinClk, pinDIO);
+  comWriteByte(pinClk, pinDIO,cmd);
+  bool acknowledged = comAck(pinClk, pinDIO);
+  comStop(pinClk, pinDIO);
+  return acknowledged;
+}
+
+bool    SevenSegmentTM1637::command(const uint8_t* commands, uint8_t length) const {
+  return command(_pinClk, _pinDIO, commands, length);
+};
+
+bool    SevenSegmentTM1637::command(uint8_t pinClk, uint8_t pinDIO, const uint8_t* commands, uint8_t length) {
   bool acknowledged = true;
-  i2cStart();
+  comStart(pinClk, pinDIO);
   for (uint8_t i=0; i < length;i++) {
-    i2cWriteByte(command[i]);
-    acknowledged &= i2cAck();
+    comWriteByte(pinClk, pinDIO, commands[i]);
+    acknowledged &= comAck(pinClk, pinDIO);
   };
-  i2cStop();
+  comStop(pinClk, pinDIO);
   return acknowledged;
-};
+}
 
-uint8_t SevenSegmentTM1637::i2cReadByte(void) const {
+uint8_t SevenSegmentTM1637::comReadByte(void) const {
   uint8_t readKey = 0;
 
-  i2cStart();
-  i2cWriteByte(TM1637_COM_SET_DATA | TM1637_SET_DATA_READ);
-  i2cAck();
+  comStart();
+  comWriteByte(TM1637_COM_SET_DATA | TM1637_SET_DATA_READ);
+  comAck();
 
   pinAsInput(_pinDIO);
   digitalHigh(_pinDIO);
@@ -589,16 +424,16 @@ uint8_t SevenSegmentTM1637::i2cReadByte(void) const {
 
   };
   pinAsOutput(_pinDIO);
-  i2cAck();
-  i2cStop();
+  comAck();
+  comStop();
   return readKey;
 };
 
-void    SevenSegmentTM1637::i2cWriteByte(uint8_t command) const{
-  i2cWriteByte(_pinClk, _pinDIO, command);
+void    SevenSegmentTM1637::comWriteByte(uint8_t command) const{
+  comWriteByte(_pinClk, _pinDIO, command);
 };
 
-void    SevenSegmentTM1637::i2cWriteByte(uint8_t pinClk, uint8_t pinDIO, uint8_t command) {
+void    SevenSegmentTM1637::comWriteByte(uint8_t pinClk, uint8_t pinDIO, uint8_t command) {
   // CLK in bits
   for ( uint8_t i=0; i < 8; i++) {
     digitalLow(pinClk);   // CLK LOW
@@ -617,11 +452,11 @@ void    SevenSegmentTM1637::i2cWriteByte(uint8_t pinClk, uint8_t pinDIO, uint8_t
   };
 }
 
-void    SevenSegmentTM1637::i2cStart(void) const {
-  i2cStart(_pinClk, _pinDIO);
+void    SevenSegmentTM1637::comStart(void) const {
+  comStart(_pinClk, _pinDIO);
 };
 
-void    SevenSegmentTM1637::i2cStart(uint8_t pinClk, uint8_t pinDIO) {
+void    SevenSegmentTM1637::comStart(uint8_t pinClk, uint8_t pinDIO) {
   digitalHigh(pinDIO);   // DIO HIGH
   digitalHigh(pinClk);   // CLK HIGH
   delayMicroseconds(TM1637_CLK_DELAY_US);
@@ -629,12 +464,11 @@ void    SevenSegmentTM1637::i2cStart(uint8_t pinClk, uint8_t pinDIO) {
   digitalLow(pinDIO);    // DIO  LOW
 }
 
-
-void    SevenSegmentTM1637::i2cStop(void) const {
-  i2cStop(_pinClk, _pinDIO);
+void    SevenSegmentTM1637::comStop(void) const {
+  comStop(_pinClk, _pinDIO);
 };
 
-void    SevenSegmentTM1637::i2cStop(uint8_t pinClk, uint8_t pinDIO) {
+void    SevenSegmentTM1637::comStop(uint8_t pinClk, uint8_t pinDIO) {
   digitalLow(pinClk);   // CLK LOW
   delayMicroseconds(TM1637_CLK_DELAY_US);
 
@@ -647,11 +481,11 @@ void    SevenSegmentTM1637::i2cStop(uint8_t pinClk, uint8_t pinDIO) {
   digitalHigh(pinDIO);   // DIO HIGH
 }
 
-bool    SevenSegmentTM1637::i2cAck(void) const {
-  i2cAck(_pinClk, _pinDIO);
+bool    SevenSegmentTM1637::comAck(void) const {
+  comAck(_pinClk, _pinDIO);
 };
 
-bool  SevenSegmentTM1637::i2cAck(uint8_t pinClk, uint8_t pinDIO) {
+bool    SevenSegmentTM1637::comAck(uint8_t pinClk, uint8_t pinDIO) {
   bool acknowledged = false;
 
   digitalLow(pinClk);          // CLK  LOW

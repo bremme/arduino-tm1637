@@ -1,6 +1,6 @@
 #include "SevenSegmentTM1637.h"
+#include "SevenSegmentExtended.h"
 #include "SevenSegmentFun.h"
-#include "DirectPortAccess.h"
 
 // define clock and digital input pins
 #define PIN_CLK   4
@@ -32,8 +32,8 @@ void loop() {
   // initialize horizontal level counters
   int8_t i,j,k,l;
   uint8_t levels[4];
-  
-  
+
+
   // repeat 5 times
   for ( uint8_t r=0; r < 4; r++) {
     // increae i and k, decrease j and l

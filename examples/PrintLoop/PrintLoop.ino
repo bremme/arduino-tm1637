@@ -1,6 +1,5 @@
 #include "SevenSegmentTM1637.h"
 #include "SevenSegmentFun.h"
-#include "DirectPortAccess.h"
 
 // define clock and digital input pins
 #define PIN_CLK   4

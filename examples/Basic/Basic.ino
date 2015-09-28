@@ -10,33 +10,25 @@ SevenSegmentTM1637    display(PIN_CLK, PIN_DIO);
 
 void setup() {
   Serial.begin(9600);
-  // display.begin();
+  display.begin();
   display.setBacklight(100);
-  display.command(B01000000);
-  uint8_t buffer[3] = {B11000000, 255, 128};
-  display.command(buffer,3);
-  // display.writeRawBytes(buffer,2,0);
-
-  // uint8_t cmd = B10001111;
-  // display.command(cmd);
-  // cmd = B01000100;
-  // display.command(cmd);
-  // cmd = B11000000;
-  // uint8_t data= 255;
-  // uint8_t b[2] = {cmd, data};
-  // display.command(b,2);
-
-
-  // display.print(F("INIT"));
+  display.print("INIT");
   delay(1000);
 };
 
 
 void loop() {
-
-  // display.print(F("LOOP"));
+  display.print("LOOP");
   delay(1000);
-
-  // print
+  display.print("COUNTING SOME DIGITS");
+  display.clear();
+  for (uint8_t i=0; i < 100; i++) {
+    display.print(i);
+    delay(100);
+  };
+  display.clear();
+  display.print("SUCC");
+  display.blink();
+  delay(1000);
 
 }

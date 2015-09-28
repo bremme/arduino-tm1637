@@ -8,7 +8,7 @@ const PROGMEM uint8_t levelVerticalMap[4] = {
 };
 
 SevenSegmentFun::SevenSegmentFun(uint8_t pinClk, uint8_t pinDIO) :
-  SevenSegmentTM1637(pinClk, pinDIO)
+  SevenSegmentExtended(pinClk, pinDIO)
 {
   randomSeed(analogRead(0));
 };
@@ -20,15 +20,19 @@ void  SevenSegmentFun::printLevelVertical(uint8_t level, bool leftToRight, uint8
 
   for( uint8_t i=0; i < TM1637_MAX_COLOM;i++) {
     if ( ( i < level && leftToRight ) || ( i >= ( 4 - level ) && !leftToRight) ) {
-      _printBuffer[i] = symbol;
+      _rawBuffer[i] = symbol;
     } else {
-      _printBuffer[i] = 0;
+      _rawBuffer[i] = 0;
     }
   };
 
-  writeRawBytes(_printBuffer, TM1637_MAX_COLOM, 0);
+  printRaw(_rawBuffer, TM1637_MAX_COLOM, 0);
 
 };
+
+void printLevelVertical(uint8_t levels[TM1637_MAX_LINES*3], bool leftToRight) {
+
+}
 
 void  SevenSegmentFun::nightrider(uint8_t repeats, uint16_t d, uint8_t symbol) {
 
@@ -44,11 +48,11 @@ void  SevenSegmentFun::nightrider(uint8_t repeats, uint16_t d, uint8_t symbol) {
 
   for( int8_t r=0; r < repeats; r++) {
     for (int8_t i = (TM1637_MAX_COLOM - 1); i > 0; i--) {
-      writeRawBytes( &buffer[i],4,0);
+      printRaw( &buffer[i],4,0);
       delay(d);
     };
     for ( int8_t i = 0; i < (TM1637_MAX_COLOM - 1); i++) {
-      writeRawBytes( &buffer[i], 4, 0);
+      printRaw( &buffer[i], TM1637_MAX_COLOM, 0);
       delay(d);
     };
   }
@@ -58,33 +62,33 @@ void  SevenSegmentFun::printLevelHorizontal( uint8_t levels[4] ) {
   for (uint8_t i=0; i < TM1637_MAX_COLOM;i++) {
     levels[i] /= (100 / 3);
     levels[i] = ( levels[i] > 3)?3:levels[i];
-    _printBuffer[i] =  pgm_read_byte_near(levelVerticalMap + levels[i]);
+    _rawBuffer[i] =  pgm_read_byte_near(levelVerticalMap + levels[i]);
   };
-  writeRawBytes(_printBuffer, TM1637_MAX_COLOM, 0);
+  printRaw(_rawBuffer, TM1637_MAX_COLOM, 0);
 }
 
 void  SevenSegmentFun::scrollingText(const char* str, uint8_t repeats) {
 
-    size_t length = encode(&_printBuffer[3], str, TM1637_PRINT_BUFFER_SIZE);
+    // size_t length = encode(&_printBuffer[3], str, TM1637_PRINT_BUFFER_SIZE);
 
     uint8_t paddingBegin = TM1637_MAX_COLOM - 1;
-    uint8_t totalPadding = (2 * TM1637_MAX_COLOM) - 1;
+    uint8_t totalPadding = (2 * paddingBegin) + 1;
 
-    // padd with three spaces in front
-    for(uint8_t i=0; i < paddingBegin; i++) {
-      _printBuffer[i] = 0;
-    };
-    // padd with four spaces at the end
-    for(uint8_t i = length + paddingBegin; i < length + totalPadding ; i++) {
-      _printBuffer[i] = 0;
-    };
-
-    for( ; repeats != 0; repeats--) {
-      writeRawBytes(_printBuffer, length + totalPadding);
-      if ( repeats > 250 ) {
-        repeats++;
-      }
-    };
+    // // padd with three spaces in front
+    // for(uint8_t i=0; i < paddingBegin; i++) {
+    //   _printBuffer[i] = 0;
+    // };
+    // // padd with four spaces at the end (empty scree)
+    // for(uint8_t i = length + paddingBegin; i < length + totalPadding ; i++) {
+    //   _printBuffer[i] = 0;
+    // };
+    //
+    // for( ; repeats != 0; repeats--) {
+    //   printRaw(_printBuffer, length + totalPadding);
+    //   if ( repeats > 250 ) { // more than 250 -> forever
+    //     repeats++;
+    //   }
+    // };
 }
 
 void  SevenSegmentFun::snake(uint8_t repeats, uint16_t d) {
@@ -101,32 +105,32 @@ void  SevenSegmentFun::snake(uint8_t repeats, uint16_t d) {
         // set segments
         // top edges
         if ( i == j) {
-          _printBuffer[j] =TM1637_CHAR_SNAKE_0;
+          _rawBuffer[j] =TM1637_CHAR_SNAKE_0;
         }
         // top right edge
         else if ( i == TM1637_MAX_COLOM && j == 3) {
-          _printBuffer[j] =TM1637_CHAR_SNAKE_1;
+          _rawBuffer[j] =TM1637_CHAR_SNAKE_1;
         }
         // bottom left edge
         else if ( i == (TM1637_MAX_COLOM + 1) && j == 3) {
-          _printBuffer[j] =TM1637_CHAR_SNAKE_2;
+          _rawBuffer[j] =TM1637_CHAR_SNAKE_2;
         }
         // bottom edges
         else if ( i + j == (widthEdged + 1) ) {
-          _printBuffer[j] =TM1637_CHAR_SNAKE_3;
+          _rawBuffer[j] =TM1637_CHAR_SNAKE_3;
         }
         // bottom left edge
         else if ( i == (widthEdged + 2) && j == 0) {
-          _printBuffer[j] =TM1637_CHAR_SNAKE_4;
+          _rawBuffer[j] =TM1637_CHAR_SNAKE_4;
         }
         // top left edge
         else if ( i == (widthEdged + 3) && j == 0) {
-          _printBuffer[j] =TM1637_CHAR_SNAKE_5;
+          _rawBuffer[j] =TM1637_CHAR_SNAKE_5;
         } else {
-          _printBuffer[j] = 0;
+          _rawBuffer[j] = 0;
         };
       };
-      writeRawBytes(_printBuffer, 4, 0);
+      printRaw(_rawBuffer, 4, 0);
       delay(d);
     }
 
@@ -213,7 +217,7 @@ void  SevenSegmentFun::bouchingBall(uint16_t moves, uint16_t d, bool runForever)
 void SevenSegmentFun::printBall( const int8_t x, const int8_t y ) {
   // uint8_t buffer[4] = {0,0,0,0};
   // buffer[x] = (y > 0)?TM1637_CHAR_BALL_LOW:TM1637_CHAR_BALL_HIGH;
-  // writeRawBytes(buffer);
+  // printRaw(buffer);
 
   uint8_t symbol = (y > 0)?TM1637_CHAR_BALL_LOW:TM1637_CHAR_BALL_HIGH;
 
@@ -224,5 +228,5 @@ void SevenSegmentFun::printBall( const int8_t x, const int8_t y ) {
 void SevenSegmentFun::print4Bit( const uint8_t x, const uint8_t y, uint8_t symbol) {
   uint8_t buffer[4] = {0,0,0,0};
   buffer[x] = symbol;
-  writeRawBytes(buffer);
+  printRaw(buffer);
 }

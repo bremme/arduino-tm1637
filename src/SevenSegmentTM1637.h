@@ -20,7 +20,7 @@
  #include <WProgram.h>
 #endif
 
-#include <avr/pgmspace.h>
+#include <avr/pgmspace.h>   // Used for PROGMEM
 
 // COMPILE TIME USER CONFIG ////////////////////////////////////////////////////
 #define TM1637_DEBUG                  true   // true for serial debugging
@@ -40,7 +40,7 @@
 #define TM1637_MAX_CHARS    128
 
 // PROGRAM CONFIG (ONLY CHANGE WHEN YOU KNOW WHAT YOU RE DOING:)////////////////
-#define TM1637_CLK_DELAY_US 1           // clock delay for communication
+#define TM1637_CLK_DELAY_US 5           // clock delay for communication
 // mine works with 1us, perhaps increase if display does not function ( tested upto 1ms)
 
 
@@ -164,26 +164,9 @@ public:
   void    off(void);
 
   // SevenSegmentTM1637 METHODS ///////////////////////////////////////////////
-  /* Prints given time to the display
-  @param [in] hour        hours or minutes
-  @param [in] min         minutes or seconds
-  */
-  void    printTime(uint8_t hour, uint8_t min, bool blink = false);
-  /* Prints given time to the display
-  @param [in] t           time given as an int, e.g. 1643 prints 16:43
-  */
-  void    printTime(uint16_t t, bool blink);
-  /* Print two one or two digit numbers to the display
-  * Prints a number to the left and right of the display
-  *
-  @param [in] leftCounter   the number on the left side of the display
-  @param [in] rightcounter  the numnber on the right side of the display
-  */
-  void    printDualCounter(int8_t leftCounter, int8_t rightCounter);
-
   /* Blink the last printed text
   *
-  @param [in] blinkDelay    optional: blink delya in ms
+  @param [in] blinkDelay    optional: blink delay in ms
   @param [in] repeats       optional: number of blink repeats
   */
   void    blink(uint8_t blinkDelay = TM1637_DEFAULT_BLINK_DELAY, uint8_t repeats = TM1637_DEFAULT_BLINK_REPEAT);
@@ -221,6 +204,12 @@ public:
   @param [in] bufferSize    the size/length of the buffer
   */
   size_t  encode(uint8_t* buffer, const char* str, size_t bufferSize);
+  /* Encodes a byte array to sevensegment binairy
+  *
+  @param [out] buffer       holds the encodes char array
+  @param [in] byteArr       the byte array to encode
+  @param [in] bufferSize    the size/length of the buffer
+  */
   size_t  encode(uint8_t* buffer, const uint8_t* byteArr, size_t arrSize);
   /* Shift an array one position to the left
   @param [out] buffer       the buffer to be shifted
@@ -229,8 +218,7 @@ public:
   void    shiftLeft(uint8_t* buffer, size_t length);
 
   // SevenSegmentTM1637 low level methods (use when you know what you're doing)
-
-  /* Writes raw (encoded) bytes to the display
+  /* Prints raw (encoded) bytes to the display
   *         A
   *       ___
   *  * F |   | B
@@ -243,38 +231,64 @@ public:
   *
   * For example to print an H, you would set bits BCEFG, this gives B01110110 in binary or 118 in decimal or 0x76 in HEX.
   * Bit 7 (X) only applies to the second digit and sets the colon
+  *
+  /* Print raw (binary encodes) bytes to the display
+  @param [in] rawBytes      Array of raw bytes
+  @param [in] length        optional: length to print to display
+  @param [in] position      optional: Start position
   */
-  void    writeRawBytes(const uint8_t rawBytes[], uint8_t length = 4, uint8_t position = 0);
-
   void    printRaw(const uint8_t* rawBytes, size_t length = 4, uint8_t position = 0);
+  /* Print raw (binary encodes) bytes to the display
+  @param [in] rawByte       Raw byte
+  @param [in] position      optional: Start position
+  */
   void    printRaw(uint8_t rawByte, uint8_t position);
-
-  /* Write command to IC TM1637_CHAR_EXC
-  @param [in] command         command to send
-  @return acknowledged?
+  /* Write command to IC TM1637
+  @param [in] cmd         command to send
+  @return acknowledged?   command was (successful) acknowledged
   */
   bool    command(uint8_t cmd) const;
   bool    command(const uint8_t* command, uint8_t length) const;
-  uint8_t i2cReadByte(void) const;
-  void    i2cWriteByte(uint8_t command) const;
-  void    i2cStart(void) const;
-  void    i2cStop(void) const;
-  bool    i2cAck(void) const;
+  /* Read bytes from IC TM1637
+  * The IC also can read the state of a keypad? TODO untested
+  */
+  uint8_t comReadByte(void) const;
+  /* Write a single command to the display
+  @param [in] cmd         command to send
+  */
+  void    comWriteByte(uint8_t command) const;
+  /* Send start signal
+  * Send the start signal for serial communication
+  */
+  void    comStart(void) const;
+  /* Send stop signal
+  * Send the stop signal for serial communication
+  */
+  void    comStop(void) const;
+  /* Get command acknowledged
+  * Get acknowledge signal (command was succesful received)
+  */
+  bool    comAck(void) const;
 
-  static void    i2cStart(uint8_t pinClk, uint8_t pinDIO);
-  static void    i2cWriteByte(uint8_t pinClk, uint8_t pinDIO, uint8_t command);
-  static bool    i2cAck(uint8_t pinClk, uint8_t pinDIO);
-  static void    i2cStop(uint8_t pinClk, uint8_t pinDIO);
+  /* Static version of low level function
+  * If using more than one display, this saves some space since these methods will be shared among all instances/objects of the class
+  */
+  static bool    command(uint8_t pinClk, uint8_t pinDIO, uint8_t cmd);
+  static bool    command(uint8_t pinClk, uint8_t pinDIO, const uint8_t* command, uint8_t length);
+  static void    comStart(uint8_t pinClk, uint8_t pinDIO);
+  static void    comWriteByte(uint8_t pinClk, uint8_t pinDIO, uint8_t command);
+  static bool    comAck(uint8_t pinClk, uint8_t pinDIO);
+  static void    comStop(uint8_t pinClk, uint8_t pinDIO);
 protected:
   const uint8_t   _pinClk;            // clock pin
   const uint8_t   _pinDIO;            // digital out pin
-  uint8_t         _numCols;
-  uint8_t         _numRows;
+  uint8_t         _numCols;           // number of columns
+  uint8_t         _numRows;           // number of rows
 
   uint8_t   _cursorPos;               // current cursor position
   uint16_t  _printDelay;              // print delay in ms (multiple chars)
-  uint8_t   _printBuffer[TM1637_PRINT_BUFFER_SIZE];
-  uint8_t   _colonBit;                // colon bit if set
+  uint8_t   _colonOn;                 // colon bit if set
+  uint8_t   _rawBuffer[TM1637_MAX_COLOM];// hold the last chars printed to display
 };
 
 

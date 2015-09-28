@@ -1,6 +1,6 @@
 #include "SevenSegmentTM1637.h"
+#include "SevenSegmentExtended.h"
 #include "SevenSegmentFun.h"
-#include "DirectPortAccess.h"
 
 #define SERIAL_BAUD 9600
 // define clock and digital input pins (can be any digital pin)

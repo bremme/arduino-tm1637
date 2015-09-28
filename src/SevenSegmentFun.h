@@ -8,11 +8,12 @@
 #endif
 
 #include "SevenSegmentTM1637.h"
+#include "SevenSegmentExtended.h"
 
-
-#define  TM1637_SNAKE_DEFAULT_DELAY         50
-#define  TM1637_BOUNCH_BALL_DEFAULT_DELAY   100
-#define  TM1637_NIGHTRIDER_DEFAULT_DELAY    200
+// COMPILE TIME USER CONFIG ////////////////////////////////////////////////////
+#define  TM1637_SNAKE_DEFAULT_DELAY         50  // Snake step delay ms
+#define  TM1637_BOUNCH_BALL_DEFAULT_DELAY   100 // Bounching ball delay ms
+#define  TM1637_NIGHTRIDER_DEFAULT_DELAY    200 // Nightrider delay ms
 //
 //        A
 //       ---
@@ -24,11 +25,11 @@
 // X defines the colon (dots) and only applies to byte 1 (second from left)
 //                BXGFEDCBA
 
-#define TM1637_CHAR_VERT_LEVEL     B00110110  // | |
+#define TM1637_CHAR_VERT_LEVEL     B00110110  // ||
 
-#define TM1637_CHAR_HOR_LEVEL_0    B00000000  //
-#define TM1637_CHAR_HOR_LEVEL_1    B00001000  // _
-#define TM1637_CHAR_HOR_LEVEL_2    B01001000  // _
+#define TM1637_CHAR_HOR_LEVEL_0    B00000000
+#define TM1637_CHAR_HOR_LEVEL_1    B00001000
+#define TM1637_CHAR_HOR_LEVEL_2    B01001000
 #define TM1637_CHAR_HOR_LEVEL_3    B01001001
 
 #define TM1637_CHAR_SNAKE_0        B00000001
@@ -41,10 +42,11 @@
 #define TM1637_CHAR_BALL_HIGH      B01100011
 #define TM1637_CHAR_BALL_LOW       B01011100
 
-class SevenSegmentFun : public SevenSegmentTM1637 {
+class SevenSegmentFun : public SevenSegmentExtended {
   public:
     SevenSegmentFun(uint8_t pinClk, uint8_t pinDIO);
     void printLevelVertical(uint8_t level, bool leftToRight = true, uint8_t symbol = TM1637_CHAR_VERT_LEVEL);
+    void printLevelVertical(uint8_t levels[TM1637_MAX_LINES*3], bool leftToRight = true);
     void printLevelHorizontal(uint8_t levels[4]);
     void scrollingText(const char* str, uint8_t repeats);
     void snake(uint8_t repeats = 1, uint16_t d = TM1637_SNAKE_DEFAULT_DELAY);
@@ -54,7 +56,7 @@ class SevenSegmentFun : public SevenSegmentTM1637 {
     void bouchingBall(uint16_t moves, uint16_t d, bool runForever = false);
 
     void printBall(const int8_t x, const int8_t y);
-    void print4Bit( const uint8_t x, const uint8_t y, uint8_t symbol);
+    void print4Bit(const uint8_t x, const uint8_t y, uint8_t symbol);
 
   private:
 };

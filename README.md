@@ -1,45 +1,101 @@
+# SevenSegment TM1637
 
-These units are sold by ebay, dx, aliexpress
+Arduino library for controlling a TM163x based 7-segment display module. These modules are sold under various names by various suppliers. For example:
 
-use TM1637 chip
+* [Seed Studio: Grove 4 digit display](http://www.seeedstudio.com/depot/grove-4digit-display-p-1198.html)
+* [Ebay: 4 Bits Digital Tube LED TM1637](http://www.ebay.com/sch/i.html?_odkw=4+Bits+Digital+Tube+LED&_osacat=0&_from=R40&_trksid=p2045573.m570.l1313.TR0.TRC0.H0.X4+Bits+Digital+Tube+LED+TM1637.TRS0&_nkw=4+Bits+Digital+Tube+LED+TM1637&_sacat=0)
+* [DealExtreme: LED 4-Digit Display Module](http://www.dx.com/s/TM1637)
 
-names:
-4 Bits Digital Tube LED Display Module With Clock Display TM1637 for Arduino
-4 Bits TM1637 Red Digital Tube LED Display Module With Clock Cheap
-4 Bits Digital Tube LED Display Module With Clock Display Board For Arduino DIY
-TM1637 4 Bits Digital Tube LED Display Module With Clock Display For Arduino NEW
+They come in various size, colors and there is a clock and decimal display variant. But the most command one is the red 0.36" clock version, this is also the cheapest one (you can get those for about $1.50). I've written this library using the above module, if I get my hands on any of the other variant I might at some specific code, for example to print floats on the decimal version.
+
+# Hardware setup
+
+| TM1637 PIN | Arduino PIN      | Description         |
+|------------|------------------|---------------------|
+| CLK        |  Any digital pin | Clock               |
+| DIO        |  Any digital pin | Digital output      |
+| VCC        |  5V              | Supply voltage      |
+| GND        |  GND             | Ground              |
 
 
+# Installation
 
+Like any other arduino library this library is installed by copying the files into a directory on the Arduino IDE search path. Most common is to put all files in a director in `your sketch folder/libraries/SevenSegmentTM1637/`. See [installing additional Arduino libraries](https://www.arduino.cc/en/Guide/Libraries) for more information.
 
+# Usage
+
+This library used the [LCD API v1.0](http://playground.arduino.cc/Code/LCDAPI) so you can use the same functions/methods using this library as any lcd library which uses the LCDAPI as well. Furthermore this library (like the described in the LCD API) inherent the Print class. This means that you can use all Print class functions/methods like you're used to when you're doing `Serial.print("Something")` for example.
+
+## Basic methods
+
+* `SevenSegmentTM1637(clkPin, dioPin)`Creates a display object
+* `init()`              Initializes the display
+* `print(value)`        Prints anything to the display (e.g. a string, number..)
+* `clear()`             Clears the display (and resets cursor)
+* `home()`              Resets cursor
+* `setCursor(row, col)` Set the cursor to specified position
+* `setBacklight(value)` Sets the brightness of the display
+* `on()`                Turn the display on (set brightness to default)
+* `off()`               Turns the display off (set brightness to zero)
+* `blink()`             Blinks what ever is on the display
+* `setColonOn(bool)`    Sets the colon in the middle of the display
+* `setPrintDelay(time)` Sets the delay when printing more than 4 characters
+
+## Advanced methods
+
+* `encode()`    Encodes a single digit, single char or char array (C string)
+* `printRaw()`  Prints raw byte(s) to the display
+* `command()`   Sends one or more raw byte commands to the display
+
+## Low level methods
+
+* `comStart()`            Serial communication start command
+* `comWriteByte(bytes)`   Serial communication send byte command
+* `comAck()`              Serial communication get acknowledged command
+* `comStop()`             Serial communication stop command
+
+If you still want or need more functionality, I've included two super classes:
+
+* `SevenSegmentExtended()`  Extends the base class with more usefull functions.
+* `SevenSegmentFun()`       Even more extensions for fun.
+
+If you use any of these super classes, you will also get all the basic, advanced and low level methods as well. If you use the fun class extension you will get the extended class methods as well.
+
+## Extended class extra methods
+
+* `printTime(hour, min)`  Prints the time to the display
+* `printDualCounter(leftValue, rightValue)` Prints two digits to the display
+
+## Fun class extra methods
+
+* `printLevelVertical(level)`   Prints 1-3 vertical levels e.g. volume, battery
+* `printLevelHorizontal(levels` Prints 4 horizontal levels e.g. equalizer
+* `scrollingText()`             Prints text and (keeps) scrolling
+* `snake()`                     Classic snake demo
+* `nightrider()`                Nightrider Kit demo
+* `bombTimer()`                 Count down a (bomb) timer
+* `bouchingBall()`              Bounching ball demo
+
+For more extended information on what arguments all above functions accept and return see the header files of the classes (SevenSegmentTM1637.h, SevenSegmentExtended.h and SevenSegmentFun.h).
+
+# Changelog
+
+* 28-09-2015 version 1.0
+
+# Sources
+
+I've looked at many sources while constructing this library, basicly all alternative Arduino TM1637 libraries and some AVR TM1637 libraries. While doing so I've found some really nice improvements compared to other implementations. For example, most libraries use a really low clock speed (~50us), I've tested with clock speeds as low as 1us and the chip still seems to respond well. Furthermore, from the (Chinese) datasheet it seems that you always have to perform three operation when communicating with the IC; set some configuration, set the address and send 1-4 digit data and set the display brightness. I've found out that this is not the case, you can do all of those separately if you want.
+
+Still without all these fine examples it would have taken me a lot more time to figure out the inner workings of this IC!
 
 Sources:
-http://blog.3d-logic.com/2015/01/21/arduino-and-the-tm1637-4-digit-seven-segment-display/
+* http://blog.3d-logic.com/2015/01/21/arduino-and-the-tm1637-4-digit-seven-segment-display/
+* http://www.arduino.md/hardware/lcd-and-leds/0-36-led-display-4-digit-red/
+* https://brainy-bits.com/tutorials/4-bits-7-segment-led-display-with-arduino/
 
 
-TM1637
-======
-Arduino library for TM1637 (LED Driver)
+#### Keywords
 
+People will probably Google for keywords when looking for a driver, so here are some:
 
-Description
------------
-An Arduino library for 7-segment display modules based on the TM1637 chip, such as Seeed Studio's [Grove 4 digit display](http://www.seeedstudio.com/depot/grove-4digit-display-p-1198.html). The TM1637 chip also has keyboard input capability, but it's not implemented in this library.
-
-Hardware Connection
--------------------
-The display modules has two signal connection (and two power connections) which are CLK and DIO. These pins can be connected to any pair of digital pins on the Arduino. When an object is created, the pins should be configured. There is no limitaion on the number of instances used concurrently (as long as each instance has a pin pair of its own)
-
-Installation
-------------
-The library is installed as any Arduino library, by copying the files into a directory on the library search path of the Arduino IDE
-
-Usage
------
-The library provides a single class named TM1637Display. An instance of this class provides the following functions:
-
-* `setSegments` - Sets the raw value of the segments of each digit
-* `showNumberDec` - Displays a decimal number
-* `setBrightness` - Sets the brightness of the display
-
-The information given above is only a summary. Please refer to TM1637Display.h for more information. An example is included, demonstarting the operation of most of the functions.
+```TM1637 TM1636 library Arduino Led Driver 4 Digit Bits Digital LED Tube module LCD API Print.h Print class API display LCD AVR Atmega```
