@@ -6,7 +6,7 @@
 
   # Changelog
 
-  v1.0  25-10-2015
+  v1.0.0  25-10-2015
   * First release
 
 */
@@ -40,8 +40,9 @@ void    printTime(uint16_t t, bool blink);
 *
 @param [in] leftCounter   the number on the left side of the display
 @param [in] rightcounter  the numnber on the right side of the display
+@param [in] zeroPadding   optional: pad counters with zero
 */
-void    printDualCounter(int8_t leftCounter, int8_t rightCounter);
+void    printDualCounter(int8_t leftCounter, int8_t rightCounter, bool zeroPadding = false);
 
 };
 #endif

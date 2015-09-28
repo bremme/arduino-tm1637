@@ -21,13 +21,12 @@
 // include the SevenSegmentTM1637 library
 #include "SevenSegmentTM1637.h"
 
-// define clock and digital input pins (can be any digital pin)
-const byte PIN_CLK = 4;
-const byte PIN_DIO = 5;
 /* initialize global TM1637 Display object
 *  The constructor takes two arguments, the number of the clock pin and the digital output pin:
 * SevenSegmentTM1637(byte pinCLK, byte pinDIO);
 */
+const byte PIN_CLK = 4;   // define CLK pin (any digital pin)
+const byte PIN_DIO = 5;   // define DIO pin (any digital pin)
 SevenSegmentTM1637    display(PIN_CLK, PIN_DIO);
 
 // define a fixed buffer size for receiving characters via Serial

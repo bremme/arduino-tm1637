@@ -2,10 +2,13 @@
 
 
 SevenSegmentExtended::SevenSegmentExtended(uint8_t pinClk, uint8_t pinDIO) :
-  SevenSegmentExtended(pinClk, pinDIO)
+  SevenSegmentTM1637(pinClk, pinDIO)
 { };
 
 void SevenSegmentExtended::printTime(uint16_t t, bool blink) {
+  uint16_t max = 2359;
+  t = ( t > max)?max:t;
+
   uint8_t hour = t / 100;
   t -= (hour * 100);
   uint8_t min  = t;
@@ -14,13 +17,8 @@ void SevenSegmentExtended::printTime(uint16_t t, bool blink) {
 
 void SevenSegmentExtended::printTime(uint8_t hour, uint8_t min, bool blink) {
 
-  // static bool displayColon = true;
-  //
-  // if ( blink ) {
-  //   displayDots = true;
-  // } else {
-  //   displayDots = !displayDots;
-  // }
+  bool colonWasOn = getColonOn();
+  setColonOn(true);
 
   uint8_t buffer[4];
 
@@ -31,37 +29,57 @@ void SevenSegmentExtended::printTime(uint8_t hour, uint8_t min, bool blink) {
 
   printRaw(buffer, 4, 0);
 
-  // if ( blink ) {
-  //   buffer[1] &= ( buffer[1] & B01111111 );
-  //   delay(TM1637_DEFAULT_BLINK_DELAY);
-  //   printRaw( &buffer[1], 1, 1);
-  // };
+  // turn colon off and on again
+  if (blink) {
+    delay(TM1637_DEFAULT_BLINK_DELAY);
+    setColonOn(false);
+    printRaw(buffer[1],1);
+    delay(TM1637_DEFAULT_BLINK_DELAY);
+    setColonOn(true);
+    printRaw(buffer[1],1);
+  }
+
+  setColonOn(colonWasOn);
 
 };
 
 // positive counter 0..99, negative counter 0..-9
-void SevenSegmentExtended::printDualCounter(int8_t leftCounter, int8_t rightCounter) {
+void SevenSegmentExtended::printDualCounter(int8_t leftCounter, int8_t rightCounter, bool zeroPadding) {
 
-  leftCounter = (leftCounter > 99)?99:leftCounter;
-  rightCounter = (rightCounter > 99)?99:rightCounter;
+  int8_t max = 99;
+  int8_t min = -9;
+  uint8_t zeroByte = encode('0');
 
-  // get current state
-  bool colonOn = getColonOn();
-  uint8_t zeroByte[1] = {0};
+  leftCounter = (leftCounter > max)?max:leftCounter;
+  leftCounter = (leftCounter < min)?min:leftCounter;
+  rightCounter = (rightCounter > max)?max:rightCounter;
+  rightCounter = (rightCounter < min)?min:rightCounter;
 
-  setColonOn(true);
+  Serial.println(leftCounter);
+  Serial.println(rightCounter);
 
-  setCursor(0,0);
+
+  bool colonWasOn = getColonOn();     // get current state
+  setColonOn(true);                   // turn on the colon
+  home();                             // set cursor to zero
+
+  if ( leftCounter < 10 && leftCounter >= 0) {
+    if ( zeroPadding ) {
+      printRaw(zeroByte,1);
+      setCursor(0,1);
+    } else {
+      // print colon
+      printRaw(TM1637_COLON_BIT,1);
+    };
+  };
   print(leftCounter);
 
-  if ( leftCounter < 10 && leftCounter > 0) {
-    // to display colon
-    printRaw(zeroByte,1,1);
-  };
-
-  // clear most left byte if only single digit
-  if ( rightCounter < 10 && rightCounter > 0) {
-    printRaw(zeroByte,1,2);
+  if ( rightCounter < 10 && rightCounter >= 0) {
+    if ( zeroPadding ) {
+      printRaw(zeroByte,2);
+    }
+    uint8_t pos = 2;
+    printRaw(0,pos);
     setCursor(0,3);
   } else {
     setCursor(0,2);
@@ -69,5 +87,5 @@ void SevenSegmentExtended::printDualCounter(int8_t leftCounter, int8_t rightCoun
   print(rightCounter);
 
   // set to previous state
-  setColonOn(colonOn);
-}
+  setColonOn(colonWasOn);
+};

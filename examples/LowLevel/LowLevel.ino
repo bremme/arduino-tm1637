@@ -1,21 +1,36 @@
-/* Low level example
-* In this example the display is controlled by the low level command function.
-* See SevenSegmentTM1637.h for more details on how the protocol actually works and which commands it accepts.
+/*
+	Low level (advanced) example
+
+  In this example the display is controlled by the low level command function.
+  See SevenSegmentTM1637.h for more details on how the protocol actually works and which commands it accepts.
+
+	The circuit:
+  * connect TM1637 pin CLK to Arduino pin D4
+  * connect TM1637 pin DIO to Arduino pin D5
+  * connect TM1637 pin Vcc to Arduino pin 5V
+  * connect TM1637 pin GND to Arduino pin GND
+
+	Created 25 September 2015
+	By Bram Harmsen
+
+	https://github.com/bremme/arduino-tm1637
+
 */
 
+// include the SevenSegmentTM1637 library
 #include "SevenSegmentTM1637.h"
 
-// define clock and digital input pins (can be any digital pin)
-#define PIN_CLK   4
-#define PIN_DIO   5
-
-// initialize global TM1637 Display object
+/* initialize global TM1637 Display object
+*  The constructor takes two arguments, the number of the clock pin and the digital output pin:
+* SevenSegmentTM1637(byte pinCLK, byte pinDIO);
+*/
+const byte PIN_CLK = 4;   // define CLK pin (any digital pin)
+const byte PIN_DIO = 5;   // define DIO pin (any digital pin)
 SevenSegmentTM1637    display(PIN_CLK, PIN_DIO);
 
-
+// run setup code
 void setup() {
-  // only used to print ack to the serial console.
-  Serial.begin(9600);
+  Serial.begin(9600);     // initializes the Serial connection @ 9600 baud
 };
 
 void loop() {
@@ -28,7 +43,7 @@ void loop() {
 
   // turn display on and set brightness to max (7)
   bool ack = display.command(command);
-
+  // print acknowledged?
   Serial.println(ack);
 
   // write init to display using automatic address

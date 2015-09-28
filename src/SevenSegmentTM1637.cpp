@@ -168,16 +168,15 @@ size_t  SevenSegmentTM1637::write(const char* str) {
 
 // byte array with length
 size_t  SevenSegmentTM1637::write(const uint8_t* buffer, size_t size) {
-  TM1637_DEBUG_PRINT(F("write uint8_t*:\t")); TM1637_DEBUG_PRINTLN(buffer[0]);
+  TM1637_DEBUG_PRINT(F("write uint8_t*:\t")); TM1637_DEBUG_PRINT(buffer[0]);
   uint8_t encodedBytes[TM1637_MAX_CHARS];
 
   if ( size > TM1637_MAX_CHARS) {
     size = TM1637_MAX_CHARS;
   }
   size_t length = encode(encodedBytes, buffer, size);
-  printRaw(encodedBytes,length);
-
-
+  TM1637_DEBUG_PRINT(F(" ")); TM1637_DEBUG_PRINTLN(encodedBytes[0], BIN);
+  printRaw(encodedBytes,length, _cursorPos);
 };
 
 // Liquid cristal API
@@ -290,7 +289,7 @@ void  SevenSegmentTM1637::printRaw(uint8_t rawByte, uint8_t position) {
   uint8_t cmd[2];
   cmd[0] = TM1637_COM_SET_ADR | position;
   cmd[1] = rawByte;
-  if (position == 1) { cmd[1]|=TM1637_COLON_BIT; };
+  if (position == 1) { cmd[1]|=(_colonOn)?TM1637_COLON_BIT:0; };
   command(cmd, 2);
 };
 
@@ -300,8 +299,20 @@ void  SevenSegmentTM1637::printRaw(const uint8_t* rawBytes, size_t length, uint8
   if ( (length + position) <= _numCols) {
     uint8_t cmd[5] = {0, };
     cmd[0] = TM1637_COM_SET_ADR | (position & B111);  // sets address
-    memcpy(&cmd[position+1], rawBytes, length);       // copy bytes
-    cmd[2] |= (_colonOn)?TM1637_COLON_BIT:0;          // set colon bit
+    memcpy(&cmd[1], rawBytes, length);       // copy bytes
+
+    // do we have to print a colon?
+    if ( position < 2 ) { // printing after position 2 has never a colon
+      if ( position == 0 && length >= 2) {
+        // second index is the colon
+        cmd[2] |= (_colonOn)?TM1637_COLON_BIT:0;
+      } else {
+        // first index is the colon
+        cmd[1] |= (_colonOn)?TM1637_COLON_BIT:0;
+      }
+    }
+    TM1637_DEBUG_PRINT(F("ADDR :\t")); TM1637_DEBUG_PRINTLN(cmd[0],BIN);
+    TM1637_DEBUG_PRINT(F("DATA0:\t")); TM1637_DEBUG_PRINTLN(cmd[1],BIN);
     command(cmd, length+1);                           // send to display
   }
   // does not fit on display, need to print with delay
@@ -323,7 +334,6 @@ void  SevenSegmentTM1637::printRaw(const uint8_t* rawBytes, size_t length, uint8
   }
 
 };
-
 
 // Helpers
 uint8_t SevenSegmentTM1637::encode(char c) {
