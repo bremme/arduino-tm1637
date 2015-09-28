@@ -1,7 +1,7 @@
 /*
-	Serial Print example
+	Basic usage example
 
-	Prints text typed to the Serial Monitor on the display. Connect an Arduino to a TM1637 4 digit 7-segment display. Connect the wires as descibed below. Run the sketch and open the Serial Monitor. Set the the speed to 9600 baud, set the line ending to Newline. Now type some text and press enter, the text will be displayed on the 7-segment display.
+	Demonstrated some of the basic functionality of the library. Initialize the display, set the backlight brightness, print some text, count from 0 to 100 and print on display and blink some text.
 
   Note: make sure to set your serial monitor to line end: NEW LINE!
 
