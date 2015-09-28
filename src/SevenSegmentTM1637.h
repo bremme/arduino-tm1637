@@ -331,7 +331,7 @@ protected:
 #define TM1637_CHAR_A           B01110111 // 65  (ASCII)
 #define TM1637_CHAR_B           B01111111
 #define TM1637_CHAR_C           B00111001
-#define TM1637_CHAR_D           B01011110
+#define TM1637_CHAR_D           TM1637_CHAR_d
 #define TM1637_CHAR_E           B01111001
 #define TM1637_CHAR_F           B01110001
 #define TM1637_CHAR_G           B00111101
@@ -347,11 +347,11 @@ protected:
 #define TM1637_CHAR_Q           B01100111
 #define TM1637_CHAR_R           B00110011
 #define TM1637_CHAR_S           B01101101
-#define TM1637_CHAR_T           B01111000
+#define TM1637_CHAR_T           TM1637_CHAR_t
 #define TM1637_CHAR_U           B00111110
 #define TM1637_CHAR_V           B00011100
 #define TM1637_CHAR_W           B00101010
-#define TM1637_CHAR_X           B01110110
+#define TM1637_CHAR_X           TM1637_CHAR_H
 #define TM1637_CHAR_Y           B01101110
 #define TM1637_CHAR_Z           B01011011
 #define TM1637_CHAR_L_S_BRACKET B00111001 // 91 (ASCII)
@@ -360,32 +360,32 @@ protected:
 #define TM1637_CHAR_A_CIRCUM    B00010011
 #define TM1637_CHAR_UNDERSCORE  B00001000
 #define TM1637_CHAR_A_GRAVE     B00010000
-#define TM1637_CHAR_a           B00000000 // 97 (ASCII)
-#define TM1637_CHAR_b           B00000000
-#define TM1637_CHAR_c           B00000000
+#define TM1637_CHAR_a           B01011111 // 97 (ASCII)
+#define TM1637_CHAR_b           B01111100
+#define TM1637_CHAR_c           B01011000
 #define TM1637_CHAR_d           B01011110
-#define TM1637_CHAR_e           B00000000
-#define TM1637_CHAR_f           B00000000
-#define TM1637_CHAR_g           B00000000
-#define TM1637_CHAR_h           B00000000
-#define TM1637_CHAR_i           B00000000
-#define TM1637_CHAR_j           B00000000
-#define TM1637_CHAR_k           B00000000
-#define TM1637_CHAR_l           B00000000
-#define TM1637_CHAR_m           B00000000
-#define TM1637_CHAR_n           B00000000
-#define TM1637_CHAR_o           B00000000
-#define TM1637_CHAR_p           B00000000
-#define TM1637_CHAR_q           B00000000
-#define TM1637_CHAR_r           B00000000
-#define TM1637_CHAR_s           B00000000
-#define TM1637_CHAR_t           B00000000
-#define TM1637_CHAR_u           B00000000
-#define TM1637_CHAR_v           B00000000
-#define TM1637_CHAR_w           B00000000
-#define TM1637_CHAR_x           B00000000
-#define TM1637_CHAR_y           B00000000
-#define TM1637_CHAR_z           B00000000
+#define TM1637_CHAR_e           B01111011
+#define TM1637_CHAR_f           TM1637_CHAR_F
+#define TM1637_CHAR_g           B01101111
+#define TM1637_CHAR_h           B01110100
+#define TM1637_CHAR_i           B00000100
+#define TM1637_CHAR_j           B00001100
+#define TM1637_CHAR_k           TM1637_CHAR_K
+#define TM1637_CHAR_l           B00110000
+#define TM1637_CHAR_m           TM1637_CHAR_M
+#define TM1637_CHAR_n           B01010100
+#define TM1637_CHAR_o           B01011100
+#define TM1637_CHAR_p           TM1637_CHAR_P
+#define TM1637_CHAR_q           TM1637_CHAR_Q
+#define TM1637_CHAR_r           B01010000
+#define TM1637_CHAR_s           TM1637_CHAR_S
+#define TM1637_CHAR_t           B01111000
+#define TM1637_CHAR_u           B00011100
+#define TM1637_CHAR_v           B00011100
+#define TM1637_CHAR_w           TM1637_CHAR_W
+#define TM1637_CHAR_x           TM1637_CHAR_X
+#define TM1637_CHAR_y           B01100110
+#define TM1637_CHAR_z           TM1637_CHAR_Z
 #define TM1637_CHAR_L_ACCON     B01111001 // 123 (ASCII)
 #define TM1637_CHAR_BAR         B00000110
 #define TM1637_CHAR_R_ACCON     B01001111

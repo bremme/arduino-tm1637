@@ -132,7 +132,7 @@ SevenSegmentTM1637::SevenSegmentTM1637(uint8_t pinClk, uint8_t pinDIO) :
 // Print API ///////////////////////////////////////////////////////////////////
 // single byte
 size_t  SevenSegmentTM1637::write(uint8_t byte) {
-
+  TM1637_DEBUG_PRINT(F("write byte:\t")); TM1637_DEBUG_PRINTLN(byte);
 
   if ( _cursorPos == _numCols ) {
     shiftLeft(_rawBuffer, _numCols);
@@ -150,7 +150,7 @@ size_t  SevenSegmentTM1637::write(uint8_t byte) {
 
 // null terminated char array
 size_t  SevenSegmentTM1637::write(const char* str) {
-
+  TM1637_DEBUG_PRINT(F("write char*:\t")); TM1637_DEBUG_PRINTLN(str);
   uint8_t encodedBytes[4];
 
   encode(encodedBytes, str, 4);
@@ -168,7 +168,7 @@ size_t  SevenSegmentTM1637::write(const char* str) {
 
 // byte array with length
 size_t  SevenSegmentTM1637::write(const uint8_t* buffer, size_t size) {
-
+  TM1637_DEBUG_PRINT(F("write uint8_t*:\t")); TM1637_DEBUG_PRINTLN(buffer[0]);
   uint8_t encodedBytes[TM1637_MAX_CHARS];
 
   if ( size > TM1637_MAX_CHARS) {

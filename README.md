@@ -6,7 +6,7 @@ Arduino library for controlling a TM163x based 7-segment display module. These m
 * [Ebay: 4 Bits Digital Tube LED TM1637](http://www.ebay.com/sch/i.html?_odkw=4+Bits+Digital+Tube+LED&_osacat=0&_from=R40&_trksid=p2045573.m570.l1313.TR0.TRC0.H0.X4+Bits+Digital+Tube+LED+TM1637.TRS0&_nkw=4+Bits+Digital+Tube+LED+TM1637&_sacat=0)
 * [DealExtreme: LED 4-Digit Display Module](http://www.dx.com/s/TM1637)
 
-They come in various size, colors and there is a clock and decimal display variant. But the most command one is the red 0.36" clock version, this is also the cheapest one (you can get those for about $1.50). I've written this library using the above module, if I get my hands on any of the other variant I might at some specific code, for example to print floats on the decimal version.
+They come in different sizes, colors and there is a clock (with a colon) and decimal (with four decimal dots) display variant. But the most common one is the red 0.36" clock version, this is also the cheapest one (you can get those for about $1.50). I've written this library using the above module, if I get my hands on any of the other variants I might add some specific code, for example to print floats on the decimal version.
 
 # Hardware setup
 
@@ -20,11 +20,11 @@ They come in various size, colors and there is a clock and decimal display varia
 
 # Installation
 
-Like any other arduino library this library is installed by copying the files into a directory on the Arduino IDE search path. Most common is to put all files in a director in `your sketch folder/libraries/SevenSegmentTM1637/`. See [installing additional Arduino libraries](https://www.arduino.cc/en/Guide/Libraries) for more information.
+Like any other Aduino library this library is installed by copying the files into a directory on the Arduino IDE search path. Most common is to put all files in a director in `your sketch folder/libraries/SevenSegmentTM1637/`. See [installing additional Arduino libraries](https://www.arduino.cc/en/Guide/Libraries) for more information.
 
 # Usage
 
-This library used the [LCD API v1.0](http://playground.arduino.cc/Code/LCDAPI) so you can use the same functions/methods using this library as any lcd library which uses the LCDAPI as well. Furthermore this library (like the described in the LCD API) inherent the Print class. This means that you can use all Print class functions/methods like you're used to when you're doing `Serial.print("Something")` for example.
+This library uses the [LCD API v1.0](http://playground.arduino.cc/Code/LCDAPI) so you can use the same functions/methods using this library as any lcd library which conforms to the LCD API. Furthermore this library (like described in the LCD API) inherent the Print class (See [Serial.print()](https://www.arduino.cc/en/Serial/Print) and for more details [Print.h](https://github.com/arduino/Arduino/blob/master/hardware/arduino/avr/cores/arduino/Print.h)). This means that you can use all Print class functions/methods like you're used to when you're doing `Serial.print("Something")` or `Serial.print(128, BIN)` for example.
 
 ## Basic methods
 

@@ -1,47 +1,64 @@
-/* Serial Print example
-* Print what ever you type to the serial monitor to the display. Make sure to set your serial monitor to line end: NEW LINE!
+/*
+	Serial Print example
+
+	Prints what you type to the serial monitor to the display. Make sure to set your serial monitor to line end: NEW LINE!
+
+	The circuit:
+  * connect TM1637 pin CLK to Arduino pin D4
+  * connect TM1637 pin DIO to Arduino pin D5
+  * connect TM1637 pin Vcc to Arduino pin 5V
+  * connect TM1637 pin GND to Arduino pin GND
+
+	Created 25 September 2015
+	By Bram Harmsen
+
+	http://url/of/online/tutorial.cc
+
 */
+
 
 #include "SevenSegmentTM1637.h"
 
 // define clock and digital input pins (can be any digital pin)
-#define PIN_CLK     4
-#define PIN_DIO     5
-#define BUFFER_SIZE 128
+const byte PIN_CLK = 4;
+const byte PIN_DIO = 5;
+const byte BUFFER_SIZE = 128;
 
 // initialize global TM1637 Display object
 SevenSegmentTM1637    display(PIN_CLK, PIN_DIO);
-// initialize serial buffer
-char str[BUFFER_SIZE];
+// initialize global serial buffer
+char serialBuffer[BUFFER_SIZE];
 
 // setup loop
 void setup() {
-  Serial.begin(9600);
   display.begin();
+  Serial.begin(9600);
+  Serial.println(F("Enter some text followed by ENTER"));
+  Serial.println(F("also make sure to set the line ending to newline (\\n)"));
 };
 
 // main loop
 void loop() {
   // if received new serial data, print to display
-  if ( serialEvent() ) {
-    display.print(str);
+  if ( receivedSerialString() ) {
+    display.print(serialBuffer);
+    Serial.print(F("Echo:\t"));
+    Serial.println(serialBuffer);
   };
 };
 
 // serial event function
-bool serialEvent() {
-  static uint8_t i=0; // make static counter to keep track of count
+bool receivedSerialString() {
+  static unsigned int i=0; // make static counter to keep track of count
 
   // check if new data arrived
   while( Serial.available() ) {
 
     // if buffer is full return
     if ( i == BUFFER_SIZE-1) {
-      str[i] = '\0';
+      serialBuffer[i] = '\0'; // add termination char
       i = 0;
-      Serial.println(F("BUFFER FULL"));
-      Serial.print(F("ECHO:\t"));
-      Serial.println(str);
+      Serial.println(F("Buffer full!"));
       return true;
     }
     // read new char from serial port
@@ -49,13 +66,11 @@ bool serialEvent() {
 
     // if new line return
     if ( c == '\n') {
-      str[i] = '\0';
+      serialBuffer[i] = '\0'; // add termination char
       i = 0;
-      Serial.print(F("ECHO:\t"));
-      Serial.println(str);
       return true;
     } else {
-      str[i] = c;
+      serialBuffer[i] = c;
     }
     i++;  // increase counter
   };
