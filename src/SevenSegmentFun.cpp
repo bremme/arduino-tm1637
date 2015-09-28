@@ -69,26 +69,28 @@ void  SevenSegmentFun::printLevelHorizontal( uint8_t levels[4] ) {
 
 void  SevenSegmentFun::scrollingText(const char* str, uint8_t repeats) {
 
-    // size_t length = encode(&_printBuffer[3], str, TM1637_PRINT_BUFFER_SIZE);
+    uint8_t buffer[TM1637_MAX_CHARS];
+
+    size_t length = encode(&buffer[3], str, TM1637_MAX_CHARS);
 
     uint8_t paddingBegin = TM1637_MAX_COLOM - 1;
     uint8_t totalPadding = (2 * paddingBegin) + 1;
 
-    // // padd with three spaces in front
-    // for(uint8_t i=0; i < paddingBegin; i++) {
-    //   _printBuffer[i] = 0;
-    // };
-    // // padd with four spaces at the end (empty scree)
-    // for(uint8_t i = length + paddingBegin; i < length + totalPadding ; i++) {
-    //   _printBuffer[i] = 0;
-    // };
-    //
-    // for( ; repeats != 0; repeats--) {
-    //   printRaw(_printBuffer, length + totalPadding);
-    //   if ( repeats > 250 ) { // more than 250 -> forever
-    //     repeats++;
-    //   }
-    // };
+    // padd with three spaces in front
+    for(uint8_t i=0; i < paddingBegin; i++) {
+      buffer[i] = 0;
+    };
+    // padd with four spaces at the end (empty scree)
+    for(uint8_t i = length + paddingBegin; i < length + totalPadding ; i++) {
+      buffer[i] = 0;
+    };
+
+    for( ; repeats != 0; repeats--) {
+      printRaw(buffer, length + totalPadding);
+      if ( repeats > 250 ) { // more than 250 -> forever
+        repeats++;
+      }
+    };
 }
 
 void  SevenSegmentFun::snake(uint8_t repeats, uint16_t d) {

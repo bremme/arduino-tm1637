@@ -63,11 +63,13 @@ If you use any of these super classes, you will also get all the basic, advanced
 
 ## Extended class extra methods
 
+* `SevenSegmentExtended(clkPin, dioPin)`Creates a display object
 * `printTime(hour, min)`  Prints the time to the display
 * `printDualCounter(leftValue, rightValue)` Prints two digits to the display
 
 ## Fun class extra methods
 
+* `SevenSegmentFun(clkPin, dioPin)`Creates a display object
 * `printLevelVertical(level)`   Prints 1-3 vertical levels e.g. volume, battery
 * `printLevelHorizontal(levels` Prints 4 horizontal levels e.g. equalizer
 * `scrollingText()`             Prints text and (keeps) scrolling
@@ -82,9 +84,13 @@ For more extended information on what arguments all above functions accept and r
 
 * 28-09-2015 version 1.0
 
+# Note
+
+I spend quite a bit of time to build this library. I hope it will be useful to others. I decided to publish it, although there still might be small bugs. If you find one, just let me know and I will try to fix it. If you have any other suggestion, don't hesitate to contact me.
+
 # Sources
 
-I've looked at many sources while constructing this library, basicly all alternative Arduino TM1637 libraries and some AVR TM1637 libraries. While doing so I've found some really nice improvements compared to other implementations. For example, most libraries use a really low clock speed (~50us), I've tested with clock speeds as low as 1us and the chip still seems to respond well. Furthermore, from the (Chinese) datasheet it seems that you always have to perform three operation when communicating with the IC; set some configuration, set the address and send 1-4 digit data and set the display brightness. I've found out that this is not the case, you can do all of those separately if you want.
+I've looked at many sources while constructing this library, bassicly all alternative Arduino TM1637 libraries and some AVR TM1637 libraries. While doing so I've found some really nice improvements compared to other implementations. For example, most libraries use a really low clock speed (~50us), I've tested with clock speeds as low as 1us and the chip still seems to respond well. Furthermore, from the (Chinese) datasheet it seems that you always have to perform three operation when communicating with the IC; set some configuration, set the address and send 1-4 digit data and set the display brightness. I've found out that this is not the case, you can do all of those separately if you want.
 
 Still without all these fine examples it would have taken me a lot more time to figure out the inner workings of this IC!
 

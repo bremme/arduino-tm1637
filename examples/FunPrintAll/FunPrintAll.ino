@@ -42,8 +42,8 @@ void setup() {
 void loop() {
 
   // vertical level (e.g. audio volume)
-  // introDuceNextDemo("AUDIO VOLUME DEMO");
-  // audioVolume();
+  introDuceNextDemo("AUDIO VOLUME DEMO");
+  audioVolume();
 
   // bounchin ball
   introDuceNextDemo("BOUNCHING BALL DEMO");
