@@ -438,7 +438,7 @@ protected:
   #define pinAsInput(P)       pinMode(P, INPUT)
   #define pinAsInputPullUp(P) pinMode(P, INPUT_PULLUP)
   #define digitalLow(P)       digitalWrite(P, LOW)
-  #define digitalHigh(P)      digitalWrite(P, LOW)
+  #define digitalHigh(P)      digitalWrite(P, HIGH)
   #define isHigh(P)           (digitalRead(P) == 1)
   #define isLow(P)            (digitalRead(P) == 0)
   #define digitalState(P)     digitalRead(P)
