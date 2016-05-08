@@ -1,4 +1,4 @@
-# SevenSegment TM1637
+# SevenSegment TM1637 [![Build Status](https://travis-ci.org/bremme/arduino-tm1637.svg?branch=develop)](https://travis-ci.org/bremme/arduino-tm1637)
 
 Arduino library for controlling a TM163x based 7-segment display module. These modules are sold under various names by various suppliers. For example:
 
@@ -82,7 +82,11 @@ For more extended information on what arguments all above functions accept and r
 
 # Changelog
 
-* 28-09-2015 version 1.0
+* 28-09-2015 version 1.0.0
+* 28-09-2015 version 1.0.1
+	+ fixed folder structure to comply with Arduino library 1.5 rev 2 specifications
+* 08-05-2016 version 1.0.2
+	+ fixed digitalHigh() macro for non AVR boards
 
 # Note
 
