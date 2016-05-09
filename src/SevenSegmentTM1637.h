@@ -414,7 +414,8 @@ protected:
 #endif
 
 // direct port access macros for more speed ( communication is ~us)
-#ifdef __AVR
+// arduino:standard variant
+#if defined(__AVR_ATmega8__) || defined(__AVR_ATmega8A__) || defined(__AVR_ATmega168__) || defined(__AVR_ATmega168A__) || defined(__AVR_ATmega168P__) || defined(__AVR_ATmega168PA__) || defined(__AVR_ATmega328__) || defined(__AVR_ATmega328P__)
   #define portOfPin(P) \
     ( ((P) >= 0 && (P) < 8)? &PORTD:( ((P) > 7 && (P) < 14) ? &PORTB: &PORTC ) )
   #define ddrOfPin(P) \
@@ -423,6 +424,23 @@ protected:
     ( ((P) >= 0 && (P) < 8)? &PIND: ( ((P) > 7 && (P) < 14) ? &PINB: &PINC ) )
 
   #define pinIndex(P)         ( (uint8_t)( P > 13 ? P-14: P&7 ) )
+  #define TM1637_DIRECT_PORT_ACCESS  // set a flag to indicate direct port access macros were defined
+
+// arduino:leonardo variant
+#elif defined(__AVR_ATmega32U4__)
+  #define portOfPin(P) \
+    ( ((P) >= 8 && (P) <= 11) || ((P) >= 14 && (P) <= 17) || ((P) >= 26 && (P) <= 28) ? &PORTB:( ((P) == 5 || (P) == 13) ? &PORTC:( ((P) <= 4 || (P) == 6 || (P) == 12 || (P) == 24 || (P) == 25 || (P) == 29 || (P) == 30) ? &PORTD:( ((P) == 7) ? &PORTE: &PORTF ) ) ) )
+  #define ddrOfPin(P) \
+    ( ((P) >= 8 && (P) <= 11) || ((P) >= 14 && (P) <= 17) || ((P) >= 26 && (P) <= 28) ? &DDRB: ( ((P) == 5 || (P) == 13) ? &DDRC: ( ((P) <= 4 || (P) == 6 || (P) == 12 || (P) == 24 || (P) == 25 || (P) == 29 || (P) == 30) ? &DDRD: ( ((P) == 7) ? &DDRE: &DDRF ) ) ) )
+  #define pinOfPin(P) \
+    ( ((P) >= 8 && (P) <= 11) || ((P) >= 14 && (P) <= 17) || ((P) >= 26 && (P) <= 28) ? &PINB: ( ((P) == 5 || (P) == 13) ? &PINC: ( ((P) <= 4 || (P) == 6 || (P) == 12 || (P) == 24 || (P) == 25 || (P) == 29 || (P) == 30) ? &PIND: ( ((P) == 7) ? &PINE: &PINF ) ) ) )
+
+  #define pinIndex(P) \
+    ( (uint8_t)((P == 3 || P == 17 || P == 23) ? 0: (P == 2 || P == 15 || P == 22) ? 1: (P == 0 ||P == 16) ? 2: (P == 1||P == 14) ? 3: (P == 4 || P == 8 || P == 21 || P == 24 || P == 26) ? 4: (P == 9 || P == 20 || P == 27 || P == 30) ? 5: (P == 5 || P == 7 || P == 10 || P == 12 || P == 19 || P == 28 || P == 29) ? 6: 7) )
+  #define TM1637_DIRECT_PORT_ACCESS  // set a flag to indicate direct port access macros were defined
+#endif
+  
+#ifdef TM1637_DIRECT_PORT_ACCESS
   #define pinMask(P)          ( (uint8_t)( 1 << pinIndex(P) ) )
 
   #define pinAsInput(P)       *(ddrOfPin(P) )     &= ~pinMask(P)
