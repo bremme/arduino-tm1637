@@ -413,8 +413,8 @@ protected:
     #define TM1637_DEBUG_MESSAGELN(x)
 #endif
 
-// direct port access macros for more speed ( communication is ~us)
-#ifdef __AVR
+// arduino:standard variant direct port access macros for more speed ( communication is ~us)
+#if defined(__AVR_ATmega8__) || defined(__AVR_ATmega8A__) || defined(__AVR_ATmega168__) || defined(__AVR_ATmega168A__) || defined(__AVR_ATmega168P__) || defined(__AVR_ATmega168PA__) || defined(__AVR_ATmega328__) || defined(__AVR_ATmega328P__)
   #define portOfPin(P) \
     ( ((P) >= 0 && (P) < 8)? &PORTD:( ((P) > 7 && (P) < 14) ? &PORTB: &PORTC ) )
   #define ddrOfPin(P) \
