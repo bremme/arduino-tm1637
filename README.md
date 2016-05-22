@@ -1,4 +1,7 @@
-# SevenSegment TM1637 [![Build Status](https://travis-ci.org/bremme/arduino-tm1637.svg?branch=develop)](https://travis-ci.org/bremme/arduino-tm1637)
+# SevenSegmentTM1637 Arduino Library
+
+* develop [![Build Status](https://travis-ci.org/bremme/arduino-tm1637.svg?branch=develop)](https://travis-ci.org/bremme/arduino-tm1637)
+* master [![Build Status](https://travis-ci.org/bremme/arduino-tm1637.svg?branch=master)](https://travis-ci.org/bremme/arduino-tm1637)
 
 Arduino library for controlling a TM163x based 7-segment display module. These modules are sold under various names by various suppliers. For example:
 
@@ -7,6 +10,8 @@ Arduino library for controlling a TM163x based 7-segment display module. These m
 * [DealExtreme: LED 4-Digit Display Module](http://www.dx.com/s/TM1637)
 
 They come in different sizes, colors and there is a clock (with a colon) and decimal (with four decimal dots) display variant. But the most common one is the red 0.36" clock version, this is also the cheapest one (you can get those for about $1.50). I've written this library using the above module, if I get my hands on any of the other variants I might add some specific code, for example to print floats on the decimal version.
+
+![TM1637](extras/TM1637-4-digit-colon.jpg)
 
 # Hardware setup
 
@@ -80,6 +85,13 @@ If you use any of these super classes, you will also get all the basic, advanced
 
 For more extended information on what arguments all above functions accept and return see the header files of the classes (SevenSegmentTM1637.h, SevenSegmentExtended.h and SevenSegmentFun.h).
 
+# Todo
+
+* Refactor library to make it more modular and support more chips
+  + Add support for all TM16xx chips (most should already work)
+  + Add support for MAX7219 displays
+  + Add support for TM74HC595 displays
+
 # Changelog
 
 * 28-09-2015 version 1.0.0
@@ -87,7 +99,9 @@ For more extended information on what arguments all above functions accept and r
 * 28-09-2015 version 1.0.1
 	+ fixed folder structure to comply with Arduino library 1.5 rev 2 specifications
 * 08-05-2016 version 1.0.2
-	+ fixed digitalHigh() macro for non AVR boards
+	+ fixed digitalHigh() macro for non AVR boards (thanks to [per1234](https://github.com/per1234))
+* 22-05-2016 version 1.0.3
+ + add support for all AVR MCU's (thanks to [per1234](https://github.com/per1234))
 
 # Note
 
