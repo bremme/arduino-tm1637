@@ -83,6 +83,7 @@ For more extended information on what arguments all above functions accept and r
 # Changelog
 
 * 28-09-2015 version 1.0.0
+	+ First release
 * 28-09-2015 version 1.0.1
 	+ fixed folder structure to comply with Arduino library 1.5 rev 2 specifications
 * 08-05-2016 version 1.0.2
