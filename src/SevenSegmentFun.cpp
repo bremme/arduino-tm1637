@@ -144,17 +144,17 @@ void  SevenSegmentFun::bombTimer(uint8_t hours, uint8_t min, uint16_t speed) {
   // maximum speed is 60000 -> 1min per ms
   speed = (speed > 60000)?60000:speed;
   uint16_t d = 60000 / speed;
+
   // copy start minute
-  uint8_t m = min;
-  uint8_t h;
-  for ( h=hours; h != 0; h--) {
-    for ( ; m != 0; m--) {
-      printTime((uint8_t)h, m);
+  int8_t m = min;
+  int8_t h;
+  for ( h=hours; h >= 0; h--) {
+    for ( ; m >= 0; m--) {
+      printTime((uint8_t)h, (uint8_t)m);
       delay(d);
     };
     m = 59;   // reset minute timer
   };
-  printTime(h, 0);
   blink();
 };
 
