@@ -103,6 +103,8 @@ For more extended information on what arguments all above functions accept and r
 	+ fixed digitalHigh() macro for non AVR boards (thanks to [per1234](https://github.com/per1234))
 * 22-05-2016 version 1.0.3
  + add support for all AVR MCU's (thanks to [per1234](https://github.com/per1234))
++ 04-11-2016 version 1.0.4
+  + Fixed bombTimer not counting down to zero (thanks to [foons](https://github.com/fooons) for opening an issue)
 
 # Note
 
