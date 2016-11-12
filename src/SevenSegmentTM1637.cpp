@@ -184,10 +184,6 @@ void SevenSegmentTM1637::begin(uint8_t cols, uint8_t rows) {
   _numCols = cols;
   _numRows = rows;
   clear();
-  print(F(" ON "));
-  delay(TM1637_BEGIN_DELAY);
-  blink();
-  clear();
 };
 
 void SevenSegmentTM1637::init(uint8_t cols, uint8_t rows) {
