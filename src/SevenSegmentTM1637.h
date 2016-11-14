@@ -23,7 +23,7 @@
 #include <avr/pgmspace.h>   // Used for PROGMEM
 
 // COMPILE TIME USER CONFIG ////////////////////////////////////////////////////
-#define TM1637_DEBUG                  true   // true for serial debugging
+#define TM1637_DEBUG                  false   // true for serial debugging
 #define TM1637_BEGIN_DELAY            500     // ms
 #define TM1637_PRINT_BUFFER_SIZE      128     // lower if you don't need it
 
@@ -54,8 +54,8 @@
 #define TM1637_SET_DATA_READ    B00000010 // Read the key scan data
 #define TM1637_SET_DATA_A_ADDR  B00000000 // Automatic address increment
 #define TM1637_SET_DATA_F_ADDR  B00000100 // Fixed address
-#define TM1537_SET_DATA_M_NORM  B00000000 // Normal mode
-#define TM1537_SET_DATA_M_TEST  B00100000 // Test mode
+#define TM1637_SET_DATA_M_NORM  B00000000 // Normal mode
+#define TM1637_SET_DATA_M_TEST  B00100000 // Test mode
 
 // Address settings (2) (use logical OR to contruct complete command)
 #define TM1637_SET_ADR_00H      B0000000  // addr 00
