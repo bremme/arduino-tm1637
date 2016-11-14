@@ -26,7 +26,7 @@ They come in different sizes, colors and there is a clock (with a colon) and dec
 
 # Installation
 
-Like any other Aduino library this library is installed by copying the files into a directory on the Arduino IDE search path. Most common is to put all files in a director in `your sketch folder/libraries/SevenSegmentTM1637/`. See [installing additional Arduino libraries](https://www.arduino.cc/en/Guide/Libraries) for more information.
+Like any other Arduino library this library is installed by copying the files into a directory on the Arduino IDE search path. Most common is to put all files in a director in `your sketch folder/libraries/SevenSegmentTM1637/`. See [installing additional Arduino libraries](https://www.arduino.cc/en/Guide/Libraries) for more information.
 
 # Usage
 
