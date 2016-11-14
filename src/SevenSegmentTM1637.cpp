@@ -122,7 +122,7 @@ SevenSegmentTM1637::SevenSegmentTM1637(uint8_t pinClk, uint8_t pinDIO) :
     TM1637_COM_SET_DATA |
     TM1637_SET_DATA_WRITE |
     TM1637_SET_DATA_A_ADDR |
-    TM1537_SET_DATA_M_NORM
+    TM1637_SET_DATA_M_NORM
   );
 
 
