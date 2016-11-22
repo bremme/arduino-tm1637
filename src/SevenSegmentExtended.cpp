@@ -22,10 +22,10 @@ void SevenSegmentExtended::printTime(uint8_t hour, uint8_t min, bool blink) {
 
   uint8_t buffer[4];
 
-  buffer[0] = encode((hour / 10));
-  buffer[1] = encode((hour % 10));
-  buffer[2] = encode((min / 10));
-  buffer[3] = encode((min % 10));
+  buffer[0] = encode(int16_t(hour / 10));
+  buffer[1] = encode(int16_t(hour % 10));
+  buffer[2] = encode(int16_t(min / 10));
+  buffer[3] = encode(int16_t(min % 10));
 
   printRaw(buffer, 4, 0);
 
