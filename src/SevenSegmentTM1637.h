@@ -20,7 +20,13 @@
  #include <WProgram.h>
 #endif
 
-#include <avr/pgmspace.h>   // Used for PROGMEM
+//#include <avr/pgmspace.h>   // Used for PROGMEM
+// esp8266 compatibility
+#if (defined(__AVR__))
+#include <avr\pgmspace.h>
+#else
+#include <pgmspace.h>
+#endif
 
 // COMPILE TIME USER CONFIG ////////////////////////////////////////////////////
 #define TM1637_DEBUG                  false   // true for serial debugging
