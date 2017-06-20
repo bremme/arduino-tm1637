@@ -208,6 +208,9 @@ void SevenSegmentTM1637::setCursor(uint8_t row, uint8_t col) {
 
 void SevenSegmentTM1637::setBacklight(uint8_t value) {
   value = (value    > 100 )?100:value;  // 0..100 brightness
+  // Store the backlight value
+  _backLightValue = value;
+  // scale backlight value to 0..8
   value /= 10;                          // 0..10
   value = (value > 8   )?  8:value;     // only 8 levels and off
   uint8_t cmd = TM1637_COM_SET_DISPLAY;;
@@ -261,13 +264,15 @@ void SevenSegmentTM1637::off(void) {
 };
 
 // SevenSegmentTM1637 public methods
-void  SevenSegmentTM1637::blink(uint8_t blinkDelay, uint8_t repeats) {
+void  SevenSegmentTM1637::blink(uint8_t blinkDelay, uint8_t repeats, uint8_t maxBacklight, uint8_t minBacklight) {
   for (uint8_t i=0; i < repeats; i++) {
-    setBacklight(0);                    // turn backlight off
+    setBacklight(minBacklight);     // turn backlight off
     delay(blinkDelay);
-    setBacklight(100);
+    setBacklight(maxBacklight);     // turn backlight on
     delay(blinkDelay);
   }
+  // restore backlight
+  setBacklight(_backLightValue);
 }
 
 void  SevenSegmentTM1637::setPrintDelay(uint16_t printDelay) {

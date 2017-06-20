@@ -173,7 +173,7 @@ public:
   @param [in] blinkDelay    optional: blink delay in ms
   @param [in] repeats       optional: number of blink repeats
   */
-  void    blink(uint8_t blinkDelay = TM1637_DEFAULT_BLINK_DELAY, uint8_t repeats = TM1637_DEFAULT_BLINK_REPEAT);
+  void    blink(uint8_t blinkDelay = TM1637_DEFAULT_BLINK_DELAY, uint8_t repeats = TM1637_DEFAULT_BLINK_REPEAT, uint8_t maxBacklight=100, uint8_t minBacklight=0);
 
   // getters and setters ///////////////////////////////////////////////////////
   /* Turn the colon on or off
@@ -289,6 +289,7 @@ protected:
   uint8_t         _numCols;           // number of columns
   uint8_t         _numRows;           // number of rows
 
+  uint8_t   _backLightValue;          // brightness of the display (0..100)
   uint8_t   _cursorPos;               // current cursor position
   uint16_t  _printDelay;              // print delay in ms (multiple chars)
   uint8_t   _colonOn;                 // colon bit if set
