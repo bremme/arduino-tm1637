@@ -13,13 +13,31 @@ SevenSegmentFun::SevenSegmentFun(uint8_t pinClk, uint8_t pinDIO) :
   randomSeed(analogRead(0));
 };
 
+// 9 levels ( 0, 12.5, 25, 37.5, 50, 62.5, 75, 87.5 100) for 4 digit display (2 levels x digit)
+void  SevenSegmentFun::print9LevelVertical(uint8_t level, bool leftToRight) {
+
+  float levelScale = (100 / (TM1637_MAX_COLOM*2));
+  float barsOn = level / levelScale;
+  if (barsOn > TM1637_MAX_COLOM) barsOn = TM1637_MAX_COLOM;
+  int digitsOn = round(barsOn);
+  
+  for( uint8_t i=0; i < TM1637_MAX_COLOM;i++) {
+    if ( i < digitsOn ) {
+      if (i == digitsOn-1 && (int)barsOn != digitsOn) _rawBuffer[i] = B00110000; // One bar
+      else _rawBuffer[i] = B00110110; // Two bars
+    } else _rawBuffer[i] = 0; // Off
+  };
+
+  printRaw(_rawBuffer, TM1637_MAX_COLOM, 0);
+};
+
 // 5 levels ( 0, 25, 50, 75, 100)
 void  SevenSegmentFun::printLevelVertical(uint8_t level, bool leftToRight, uint8_t symbol) {
   level /= (100 / TM1637_MAX_COLOM);
   level = (level > TM1637_MAX_COLOM)?TM1637_MAX_COLOM:level;
 
   for( uint8_t i=0; i < TM1637_MAX_COLOM;i++) {
-    if ( ( i < level && leftToRight ) || ( i >= ( 4 - level ) && !leftToRight) ) {
+    if ( ( i < level && leftToRight ) || ( i >= ( TM1637_MAX_COLOM - level ) && !leftToRight) ) {
       _rawBuffer[i] = symbol;
     } else {
       _rawBuffer[i] = 0;

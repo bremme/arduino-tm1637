@@ -45,6 +45,7 @@
 class SevenSegmentFun : public SevenSegmentExtended {
   public:
     SevenSegmentFun(uint8_t pinClk, uint8_t pinDIO);
+    void print9LevelVertical(uint8_t level, bool leftToRight = true);
     void printLevelVertical(uint8_t level, bool leftToRight = true, uint8_t symbol = TM1637_CHAR_VERT_LEVEL);
     void printLevelVertical(uint8_t levels[TM1637_MAX_LINES*3], bool leftToRight = true);
     void printLevelHorizontal(uint8_t levels[4]);
