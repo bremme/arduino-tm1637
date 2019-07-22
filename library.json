@@ -1,0 +1,25 @@
+{
+  "name": "SevenSegmentTM1637",
+  "version": "1.0.0",
+  "keywords": "TM1637, TM1636, Arduino, LED, AVR, Atmega, esp8266, IC",
+  "description": "Library for using a 4 digit seven segment display with TM1636 or TM1637 driver IC",
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/bremme/arduino-tm1637.git"
+  },
+  "authors":
+  [
+    {
+        "name": "Bram Harmsen",
+        "email": "bramharmsen@gmail.com"
+    },
+    {
+        "name": "Andrew Smith",
+        "email": "me@andrew-smith.com",
+        "maintainer": true    	
+    }
+  ],
+  "frameworks": "arduino",
+  "platforms": "avr"
+}
