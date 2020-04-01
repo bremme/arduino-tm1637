@@ -104,7 +104,7 @@ class SevenSegmentTM1637 : public Print {
 
 public:
   // LIQUID CRISTAL API ///////////////////////////////////////////////////////
-  /* See http://playground.arduino.cc/Code/LCDAPI for more details.
+  // See http://playground.arduino.cc/Code/LCDAPI for more details.
 
   /* Constructor
   @param [in] pinClk      clock pin (any digital pin)
@@ -121,7 +121,7 @@ public:
   /* Implemented for compatibility, see begin() above */
   void    begin(uint8_t cols = TM1637_MAX_COLOM, uint8_t rows = TM1637_MAX_LINES);
   // Print class inheritance ///////////////////////////////////////////////////
-  /* See https://github.com/arduino/Arduino/blob/master/hardware/arduino/avr/cores/arduino/Print.h for more details
+  // See https://github.com/arduino/Arduino/blob/master/hardware/arduino/avr/cores/arduino/Print.h for more details
   /* This library inherent the Print class, this means that all regular print function can be used. For example:
   * printing a number:                    print(78)
   * printint a number in BIN, OCT, HEX..: print(78, BIN)
@@ -235,7 +235,7 @@ public:
   *
   * For example to print an H, you would set bits BCEFG, this gives B01110110 in binary or 118 in decimal or 0x76 in HEX.
   * Bit 7 (X) only applies to the second digit and sets the colon
-  *
+  */
   /* Print raw (binary encodes) bytes to the display
   @param [in] rawBytes      Array of raw bytes
   @param [in] length        optional: length to print to display
