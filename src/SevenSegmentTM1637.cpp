@@ -498,7 +498,7 @@ void    SevenSegmentTM1637::comStop(uint8_t pinClk, uint8_t pinDIO) {
 }
 
 bool    SevenSegmentTM1637::comAck(void) const {
-  comAck(_pinClk, _pinDIO);
+  return comAck(_pinClk, _pinDIO);
 };
 
 bool    SevenSegmentTM1637::comAck(uint8_t pinClk, uint8_t pinDIO) {
