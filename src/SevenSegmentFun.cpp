@@ -174,7 +174,7 @@ void  SevenSegmentFun::bouchingBall(uint16_t moves, uint16_t d, bool runForever)
   int8_t newX; int8_t newY;
   // default speed is 1 x right and 2 y down
   int8_t vx = 1; int8_t vy = 1;
-  bool flipVx; bool flipVy;
+  bool flipVx = false; bool flipVy = false;
 
   // print initial state
   printBall(x, y);
