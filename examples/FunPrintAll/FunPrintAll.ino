@@ -45,10 +45,10 @@ void loop() {
   introDuceNextDemo("AUDIO VOLUME DEMO");
   audioVolume();
 
-  // bounchin ball
-  introDuceNextDemo("BOUNCHING BALL DEMO");
+  // bouncing ball
+  introDuceNextDemo("BOUNCING BALL DEMO");
   unsigned int numMoves = 100; unsigned int timeDelay = 100;
-  display.bouchingBall(numMoves, timeDelay);
+  display.bouncingBall(numMoves, timeDelay);
 
   // scrolling text
   introDuceNextDemo("SCROLLING TEXT DEMO");
