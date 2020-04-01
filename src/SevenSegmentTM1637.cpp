@@ -248,11 +248,15 @@ void SevenSegmentTM1637::setBacklight(uint8_t value) {
       cmd |= TM1637_SET_DISPLAY_ON | TM1637_SET_DISPLAY_14;
       break;
     };
+#if TM1637_DEBUG
     bool ack = command(cmd);
     TM1637_DEBUG_PRINT(F("SET_DISPLAY:\t")); TM1637_DEBUG_PRINTLN((
       cmd
     ), BIN);
     TM1637_DEBUG_PRINT(F("Acknowledged:\t")); TM1637_DEBUG_PRINTLN(ack);
+#else
+    command(cmd);
+#endif
 };
 
 void SevenSegmentTM1637::setContrast(uint8_t value) {
