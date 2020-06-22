@@ -55,8 +55,8 @@ void SevenSegmentExtended::printDualCounter(int8_t leftCounter, int8_t rightCoun
   rightCounter = (rightCounter > max)?max:rightCounter;
   rightCounter = (rightCounter < min)?min:rightCounter;
 
-  Serial.println(leftCounter);
-  Serial.println(rightCounter);
+//  Serial.println(leftCounter);
+//  Serial.println(rightCounter);
 
 
   bool colonWasOn = getColonOn();     // get current state
