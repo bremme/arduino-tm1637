@@ -69,8 +69,9 @@ If you use any of these super classes, you will also get all the basic, advanced
 
 ## Extended class extra methods
 
-* `SevenSegmentExtended(clkPin, dioPin)`Creates a display object
-* `printTime(hour, min)`  Prints the time to the display
+* `SevenSegmentExtended(clkPin, dioPin)`    Creates a display object
+* `printTime(hour, min, [blink])`           Prints the time to the display
+* `printTime(time, [blink])`                Prints the time to the display
 * `printDualCounter(leftValue, rightValue)` Prints two digits to the display
 
 ## Fun class extra methods
