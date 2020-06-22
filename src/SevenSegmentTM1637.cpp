@@ -168,15 +168,21 @@ size_t  SevenSegmentTM1637::write(const char* str) {
 
 // byte array with length
 size_t  SevenSegmentTM1637::write(const uint8_t* buffer, size_t size) {
-  TM1637_DEBUG_PRINT(F("write uint8_t*:\t")); TM1637_DEBUG_PRINT(buffer[0]);
+  TM1637_DEBUG_PRINT(F("write uint8_t*:\t("));
+  for(size_t i=0; i < size; i++) {
+    TM1637_DEBUG_PRINT(buffer[i]);
+    TM1637_DEBUG_PRINT(i == size -1?F(""):F(", "));
+  }
+  TM1637_DEBUG_PRINT(F(") "));
+  TM1637_DEBUG_PRINT(size);
+
   uint8_t encodedBytes[TM1637_MAX_CHARS];
 
   if ( size > TM1637_MAX_CHARS) {
     size = TM1637_MAX_CHARS;
   }
   size_t length = encode(encodedBytes, buffer, size);
-  TM1637_DEBUG_PRINT(F(" ")); TM1637_DEBUG_PRINTLN(encodedBytes[0], BIN);
-  printRaw(encodedBytes,length, _cursorPos);
+  printRaw(encodedBytes, length, _cursorPos);
 };
 
 // Liquid cristal API
@@ -295,7 +301,6 @@ void  SevenSegmentTM1637::printRaw(uint8_t rawByte, uint8_t position) {
 };
 
 void  SevenSegmentTM1637::printRaw(const uint8_t* rawBytes, size_t length, uint8_t position) {
-
   // if fits on display
   if ( (length + position) <= _numCols) {
     uint8_t cmd[5] = {0, };
