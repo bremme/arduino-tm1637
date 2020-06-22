@@ -82,7 +82,7 @@ If you use any of these super classes, you will also get all the basic, advanced
 * `snake()`                     Classic snake demo
 * `nightrider()`                Nightrider Kit demo
 * `bombTimer()`                 Count down a (bomb) timer
-* `bouchingBall()`              Bounching ball demo
+* `bouncingBall()`              Bouncing ball demo
 
 For more extended information on what arguments all above functions accept and return see the header files of the classes (SevenSegmentTM1637.h, SevenSegmentExtended.h and SevenSegmentFun.h).
 

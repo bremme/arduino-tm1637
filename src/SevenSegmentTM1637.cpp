@@ -134,18 +134,21 @@ SevenSegmentTM1637::SevenSegmentTM1637(uint8_t pinClk, uint8_t pinDIO) :
 size_t  SevenSegmentTM1637::write(uint8_t byte) {
   TM1637_DEBUG_PRINT(F("write byte:\t")); TM1637_DEBUG_PRINTLN(byte);
 
+  size_t n = 0;
   if ( _cursorPos == _numCols ) {
     shiftLeft(_rawBuffer, _numCols);
     _rawBuffer[_cursorPos] = encode( (char)byte );
     printRaw( _rawBuffer, _numCols, 0);
+    ++n;
   };
 
   if (_cursorPos < _numCols) {
     _rawBuffer[_cursorPos] = encode( (char)byte );
     printRaw( _rawBuffer, _cursorPos+1, 0);
     setCursor(1, _cursorPos + 1);
-  };
-
+    ++n;
+  }
+  return n;
 }
 
 // null terminated char array
@@ -164,6 +167,7 @@ size_t  SevenSegmentTM1637::write(const char* str) {
       break;
     }
   }
+  return i;
 };
 
 // byte array with length
@@ -177,6 +181,7 @@ size_t  SevenSegmentTM1637::write(const uint8_t* buffer, size_t size) {
   size_t length = encode(encodedBytes, buffer, size);
   TM1637_DEBUG_PRINT(F(" ")); TM1637_DEBUG_PRINTLN(encodedBytes[0], BIN);
   printRaw(encodedBytes,length, _cursorPos);
+  return length;
 };
 
 // Liquid cristal API
@@ -243,11 +248,15 @@ void SevenSegmentTM1637::setBacklight(uint8_t value) {
       cmd |= TM1637_SET_DISPLAY_ON | TM1637_SET_DISPLAY_14;
       break;
     };
+#if TM1637_DEBUG
     bool ack = command(cmd);
     TM1637_DEBUG_PRINT(F("SET_DISPLAY:\t")); TM1637_DEBUG_PRINTLN((
       cmd
     ), BIN);
     TM1637_DEBUG_PRINT(F("Acknowledged:\t")); TM1637_DEBUG_PRINTLN(ack);
+#else
+    command(cmd);
+#endif
 };
 
 void SevenSegmentTM1637::setContrast(uint8_t value) {
@@ -493,7 +502,7 @@ void    SevenSegmentTM1637::comStop(uint8_t pinClk, uint8_t pinDIO) {
 }
 
 bool    SevenSegmentTM1637::comAck(void) const {
-  comAck(_pinClk, _pinDIO);
+  return comAck(_pinClk, _pinDIO);
 };
 
 bool    SevenSegmentTM1637::comAck(uint8_t pinClk, uint8_t pinDIO) {

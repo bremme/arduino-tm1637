@@ -164,7 +164,7 @@ void  SevenSegmentFun::bombTimer(uint8_t hours, uint8_t min, uint16_t speed, cha
   blink();
 };
 
-void  SevenSegmentFun::bouchingBall(uint16_t moves, uint16_t d, bool runForever) {
+void  SevenSegmentFun::bouncingBall(uint16_t moves, uint16_t d, bool runForever) {
 
   int8_t wallRight  = TM1637_MAX_COLOM - 1;
   int8_t wallBottom = TM1637_MAX_LINES;
@@ -174,7 +174,7 @@ void  SevenSegmentFun::bouchingBall(uint16_t moves, uint16_t d, bool runForever)
   int8_t newX; int8_t newY;
   // default speed is 1 x right and 2 y down
   int8_t vx = 1; int8_t vy = 1;
-  bool flipVx; bool flipVy;
+  bool flipVx = false; bool flipVy = false;
 
   // print initial state
   printBall(x, y);
