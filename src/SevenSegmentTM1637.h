@@ -32,8 +32,9 @@
 #define TM1637_PRINT_BUFFER_SIZE      128     // lower if you don't need it
 
 // Default values //////////////////////////////////////////////////////////////
-#define TM1637_DEFAULT_PRINT_DELAY    300 // 300 ms delay between characters
+#define TM1637_DEFAULT_PRINT_DELAY    300     // 300 ms delay between characters
 #define TM1637_DEFAULT_BLINK_DELAY    50      // ms
+#define TM1637_DEFAULT_CLOCK_BLINK_DELAY 500  // the default delay for when using printTime
 #define TM1637_DEFAULT_BLINK_REPEAT   10
 #define TM1637_DEFAULT_CURSOR_POS     0       // 0-MAX-1 (e.g 3)
 #define TM1637_DEFAULT_COLON_ON       false   //

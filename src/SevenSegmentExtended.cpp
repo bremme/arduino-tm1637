@@ -5,7 +5,7 @@ SevenSegmentExtended::SevenSegmentExtended(uint8_t pinClk, uint8_t pinDIO) :
   SevenSegmentTM1637(pinClk, pinDIO)
 { };
 
-void SevenSegmentExtended::printTime(uint16_t t, bool blink) {
+void SevenSegmentExtended::printTime(uint16_t t, bool blink, uint16_t blinkDelay) {
   uint16_t max = 2359;
   t = ( t > max)?max:t;
 
@@ -15,7 +15,7 @@ void SevenSegmentExtended::printTime(uint16_t t, bool blink) {
   printTime(hour, min, blink);
 };
 
-void SevenSegmentExtended::printTime(uint8_t hour, uint8_t min, bool blink) {
+void SevenSegmentExtended::printTime(uint8_t hour, uint8_t min, bool blink, uint16_t blinkDelay) {
 
   bool colonWasOn = getColonOn();
   setColonOn(true);
@@ -31,10 +31,10 @@ void SevenSegmentExtended::printTime(uint8_t hour, uint8_t min, bool blink) {
 
   // turn colon off and on again
   if (blink) {
-    delay(TM1637_DEFAULT_BLINK_DELAY);
+    delay(blinkDelay);
     setColonOn(false);
     printRaw(buffer[1],1);
-    delay(TM1637_DEFAULT_BLINK_DELAY);
+    delay(blinkDelay);
     setColonOn(true);
     printRaw(buffer[1],1);
   }

@@ -30,11 +30,11 @@ SevenSegmentExtended(uint8_t pinClk, uint8_t pinDIO);
 @param [in] hour          hours or minutes
 @param [in] min           minutes or seconds
 */
-void    printTime(uint8_t hour, uint8_t min, bool blink = false);
+void    printTime(uint8_t hour, uint8_t min, bool blink = false, uint16_t blinkDelay = TM1637_DEFAULT_CLOCK_BLINK_DELAY);
 /* Prints given time to the display
 @param [in] t             time given as an int, e.g. 1643 prints 16:43
 */
-void    printTime(uint16_t t, bool blink = false);
+void    printTime(uint16_t t, bool blink = false, uint16_t blinkDelay = TM1637_DEFAULT_CLOCK_BLINK_DELAY);
 /* Prints a number and aligns it (right by default)
 
   Can print both positive and negative numbers. When the the number is larger then 9999
