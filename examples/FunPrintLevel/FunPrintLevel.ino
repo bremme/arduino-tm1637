@@ -7,13 +7,12 @@
 #define PIN_DIO   5
 
 // initialize TM1637 Display objects
-SevenSegmentTM1637 TM1637Display(PIN_CLK, PIN_DIO);
-SevenSegmentFun    display(TM1637Display);
+SevenSegmentFun    display(PIN_CLK, PIN_DIO);
 
 
 void setup() {
   // initialize the display
-  TM1637Display.begin();
+  display.begin();
 }
 
 void loop() {
