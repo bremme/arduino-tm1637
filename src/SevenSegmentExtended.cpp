@@ -71,7 +71,8 @@ void SevenSegmentExtended::printNumber(int16_t number, bool zeroPadding, bool ro
 
   // align left is the default behavior, just forward to print
   if (alignRight == false) {
-    return print(number);
+    print(number);
+    return;
   }
 
   if (positive == false) {
