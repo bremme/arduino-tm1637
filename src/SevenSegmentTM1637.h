@@ -14,11 +14,7 @@
 #ifndef SevenSegmentTM1637_H
 #define SevenSegmentTM1637_H
 
-#if ARDUINO >= 100
- #include <Arduino.h>
-#else
- #include <WProgram.h>
-#endif
+#include <Arduino.h>
 
 #if (defined(__AVR__))
 #include <avr/pgmspace.h> // Used for PROGMEM (arduino)
