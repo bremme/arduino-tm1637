@@ -69,15 +69,17 @@ If you use any of these super classes, you will also get all the basic, advanced
 
 ## Extended class extra methods
 
-* `SevenSegmentExtended(clkPin, dioPin)`Creates a display object
-* `printTime(hour, min)`  Prints the time to the display
-* `printDualCounter(leftValue, rightValue)` Prints two digits to the display
+* `SevenSegmentExtended(clkPin, dioPin)`        Creates a display object
+* `printTime(hour, min, [blink], [blinkDelay])` Prints the time to the display
+* `printTime(time, [blink], [blinkDelay])`      Prints the time to the display
+* `printDualCounter(leftValue, rightValue)`     Prints two digits to the display
 
 ## Fun class extra methods
 
-* `SevenSegmentFun(clkPin, dioPin)`Creates a display object
-* `printLevelVertical(level)`   Prints 1-3 vertical levels e.g. volume, battery
-* `printLevelHorizontal(levels` Prints 4 horizontal levels e.g. equalizer
+* `SevenSegmentFun(clkPin, dioPin)`           Creates a display object
+* `printLevelVertical(level, [leftToRight])`  Print 0-100% (2 steps per digit) vertical level e.g. volume, battery
+* `printLevelVertical(level, leftToRight, symbol)`  Print 0-100% (1 step per digit) vertical level using custom symbol
+* `printLevelHorizontal(levels[])` Prints 4 horizontal levels e.g. equalizer
 * `scrollingText()`             Prints text and (keeps) scrolling
 * `snake()`                     Classic snake demo
 * `nightrider()`                Nightrider Kit demo
@@ -85,6 +87,10 @@ If you use any of these super classes, you will also get all the basic, advanced
 * `bouncingBall()`              Bouncing ball demo
 
 For more extended information on what arguments all above functions accept and return see the header files of the classes (SevenSegmentTM1637.h, SevenSegmentExtended.h and SevenSegmentFun.h).
+
+# Trouble shooting
+
+* Some boards might not have enough power on their 5V pin. In that case try to use an external 5V power supply. People reported that the ESP8266 might be one of those boards.
 
 # Todo
 
@@ -95,16 +101,28 @@ For more extended information on what arguments all above functions accept and r
 
 # Changelog
 
-* 28-09-2015 version 1.0.0
-	+ First release
-* 28-09-2015 version 1.0.1
-	+ fixed folder structure to comply with Arduino library 1.5 rev 2 specifications
-* 08-05-2016 version 1.0.2
-	+ fixed digitalHigh() macro for non AVR boards (thanks to [per1234](https://github.com/per1234))
-* 22-05-2016 version 1.0.3
- + add support for all AVR MCU's (thanks to [per1234](https://github.com/per1234))
++ 04-07-2020 version 1.1.0
+  + Improved `printLevelVertical()` using [pablo-lp](https://github.com/pablo-lp) suggestions
+    + The default `printLevelVertical()` can diplay twice the number of levels now (e.g. 9 levels for a defaulf 4 digit display)
+  + Add configurable blink delay when using the `printTime` methods (thanks to [simoneluconi](https://github.com/simoneluconi))
+  + Added a new `printNumber()` method to make it easier to print right aligned numbers
+    + Thanks [dan2600](https://github.com/dan2600), [Bilick88](https://github.com/Bilick88), [jasonacox](https://github.com/jasonacox) for your suggestions.
+  + Bug fixes
+    + Merge PR from [berendkleinhaneveld](https://github.com/berendkleinhaneveld) to fix some compiler warnings
+    + Merge PR from [facelessloser](https://github.com/facelessloser) Remove some `Serial.prinln()` calls
+    + Merge PR from [RAnders00](https://github.com/RAnders00) Fix incorrect repsonse from `comReadByte()`
+    + Merge PR from [per1234](https://github.com/per1234) Use correct separator in `keywords.txt`
 + 04-11-2016 version 1.0.4
   + Fixed bombTimer not counting down to zero (thanks to [foons](https://github.com/fooons) for opening an issue)
+* 22-05-2016 version 1.0.3
+ + add support for all AVR MCU's (thanks to [per1234](https://github.com/per1234))
+* 08-05-2016 version 1.0.2
+	+ fixed digitalHigh() macro for non AVR boards (thanks to [per1234](https://github.com/per1234))
+* 28-09-2015 version 1.0.1
+	+ fixed folder structure to comply with Arduino library 1.5 rev 2 specifications
+* 28-09-2015 version 1.0.0
+	+ First release
+
 
 # Note
 

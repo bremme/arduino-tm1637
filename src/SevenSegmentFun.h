@@ -25,7 +25,9 @@
 // X defines the colon (dots) and only applies to byte 1 (second from left)
 //                BXGFEDCBA
 
-#define TM1637_CHAR_VERT_LEVEL     B00110110  // ||
+#define TM1637_CHAR_VERT_LEVEL_I0   B00110000  // |  one bar left
+#define TM1637_CHAR_VERT_LEVEL_0I   B00000110  // |  one bar right
+#define TM1637_CHAR_VERT_LEVEL_II   B00110110  // || two bars
 
 #define TM1637_CHAR_HOR_LEVEL_0    B00000000
 #define TM1637_CHAR_HOR_LEVEL_1    B00001000
@@ -45,16 +47,15 @@
 class SevenSegmentFun : public SevenSegmentExtended {
   public:
     SevenSegmentFun(uint8_t pinClk, uint8_t pinDIO);
-    void printLevelVertical(uint8_t level, bool leftToRight = true, uint8_t symbol = TM1637_CHAR_VERT_LEVEL);
-    void printLevelVertical(uint8_t levels[TM1637_MAX_LINES*3], bool leftToRight = true);
+    void printLevelVertical(uint8_t level, bool leftToRight = true);
+    void printLevelVertical(uint8_t level, bool leftToRight, uint8_t symbol);
     void printLevelHorizontal(uint8_t levels[4]);
     void scrollingText(const char* str, uint8_t repeats);
     void snake(uint8_t repeats = 1, uint16_t d = TM1637_SNAKE_DEFAULT_DELAY);
-    void nightrider(uint8_t repeats = 10, uint16_t d = TM1637_NIGHTRIDER_DEFAULT_DELAY, uint8_t symbol = TM1637_CHAR_VERT_LEVEL);
+    void nightrider(uint8_t repeats = 10, uint16_t d = TM1637_NIGHTRIDER_DEFAULT_DELAY, uint8_t symbol = TM1637_CHAR_VERT_LEVEL_II);
     void bombTimer(uint8_t hours, uint8_t min, uint16_t speed = 60);
     void bombTimer(uint8_t hours, uint8_t min, uint16_t speed, char* str);
-    void bouncingBall(uint16_t moves, uint16_t d, bool runForever = false);
-
+    void bouchingBall(uint16_t moves, uint16_t d, bool runForever = false);
     void printBall(const int8_t x, const int8_t y);
     void print4Bit(const uint8_t x, const uint8_t y, uint8_t symbol);
 

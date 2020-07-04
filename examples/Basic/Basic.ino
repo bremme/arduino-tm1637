@@ -1,7 +1,9 @@
 /*
 	Basic usage example
 
-	Demonstrated some of the basic functionality of the library. Initialize the display, set the backlight brightness, print some text, count from 0 to 100 and print on display and blink some text.
+	Demonstrated some of the basic functionality of the library. Initialize the display,
+  set the backlight brightness, print some text, count from 0 to 100 and
+  print and blink some text.
 
   Note: make sure to set your serial monitor to line end: NEW LINE!
 

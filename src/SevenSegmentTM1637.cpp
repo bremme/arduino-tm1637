@@ -1,105 +1,6 @@
 
 #include "SevenSegmentTM1637.h"
 
-// store an ASCII Map in PROGMEM (Flash memory)
-const PROGMEM uint8_t asciiMap[96] = {
-  TM1637_CHAR_SPACE,
-  TM1637_CHAR_EXC,
-  TM1637_CHAR_D_QUOTE,
-  TM1637_CHAR_POUND,
-  TM1637_CHAR_DOLLAR,
-  TM1637_CHAR_PERC,
-  TM1637_CHAR_AMP,
-  TM1637_CHAR_S_QUOTE,
-  TM1637_CHAR_L_BRACKET,
-  TM1637_CHAR_R_BRACKET,
-  TM1637_CHAR_STAR,
-  TM1637_CHAR_PLUS,
-  TM1637_CHAR_COMMA,
-  TM1637_CHAR_MIN,
-  TM1637_CHAR_DOT,
-  TM1637_CHAR_F_SLASH,
-  TM1637_CHAR_0,          // 48 (ASCII)
-  TM1637_CHAR_1,
-  TM1637_CHAR_2,
-  TM1637_CHAR_3,
-  TM1637_CHAR_4,
-  TM1637_CHAR_5,
-  TM1637_CHAR_6,
-  TM1637_CHAR_7,
-  TM1637_CHAR_8,
-  TM1637_CHAR_9,
-  TM1637_CHAR_COLON,
-  TM1637_CHAR_S_COLON,
-  TM1637_CHAR_LESS,
-  TM1637_CHAR_EQUAL,
-  TM1637_CHAR_GREAT,
-  TM1637_CHAR_QUEST,
-  TM1637_CHAR_AT,
-  TM1637_CHAR_A,          // 65 (ASCII)
-  TM1637_CHAR_B,
-  TM1637_CHAR_C,
-  TM1637_CHAR_D,
-  TM1637_CHAR_E,
-  TM1637_CHAR_F,
-  TM1637_CHAR_G,
-  TM1637_CHAR_H,
-  TM1637_CHAR_I,
-  TM1637_CHAR_J,
-  TM1637_CHAR_K,
-  TM1637_CHAR_L,
-  TM1637_CHAR_M,
-  TM1637_CHAR_N,
-  TM1637_CHAR_O,
-  TM1637_CHAR_P,
-  TM1637_CHAR_Q,
-  TM1637_CHAR_R,
-  TM1637_CHAR_S,
-  TM1637_CHAR_T,
-  TM1637_CHAR_U,
-  TM1637_CHAR_V,
-  TM1637_CHAR_W,
-  TM1637_CHAR_X,
-  TM1637_CHAR_Y,
-  TM1637_CHAR_Z,
-  TM1637_CHAR_L_S_BRACKET,  // 91 (ASCII)
-  TM1637_CHAR_B_SLASH,
-  TM1637_CHAR_R_S_BRACKET,
-  TM1637_CHAR_A_CIRCUM,
-  TM1637_CHAR_UNDERSCORE,
-  TM1637_CHAR_A_GRAVE,       // 96 (ASCII)
-  TM1637_CHAR_a,
-  TM1637_CHAR_b,
-  TM1637_CHAR_c,
-  TM1637_CHAR_d,
-  TM1637_CHAR_e,
-  TM1637_CHAR_f,
-  TM1637_CHAR_g,
-  TM1637_CHAR_h,
-  TM1637_CHAR_i,
-  TM1637_CHAR_j,
-  TM1637_CHAR_k,
-  TM1637_CHAR_l,
-  TM1637_CHAR_m,
-  TM1637_CHAR_n,
-  TM1637_CHAR_o,
-  TM1637_CHAR_p,
-  TM1637_CHAR_q,
-  TM1637_CHAR_r,
-  TM1637_CHAR_s,
-  TM1637_CHAR_t,
-  TM1637_CHAR_u,
-  TM1637_CHAR_v,
-  TM1637_CHAR_w,
-  TM1637_CHAR_x,
-  TM1637_CHAR_y,
-  TM1637_CHAR_z,
-  TM1637_CHAR_L_ACCON,  // 123 (ASCII)
-  TM1637_CHAR_BAR,
-  TM1637_CHAR_R_ACCON,
-  TM1637_CHAR_TILDE     // 126 (ASCII)
-};
-
 
 SevenSegmentTM1637::SevenSegmentTM1637(uint8_t pinClk, uint8_t pinDIO) :
   _pinClk(pinClk),
@@ -132,18 +33,20 @@ SevenSegmentTM1637::SevenSegmentTM1637(uint8_t pinClk, uint8_t pinDIO) :
 // Print API ///////////////////////////////////////////////////////////////////
 // single byte
 size_t  SevenSegmentTM1637::write(uint8_t byte) {
-  TM1637_DEBUG_PRINT(F("write byte:\t")); TM1637_DEBUG_PRINTLN(byte);
+  TM1637_DEBUG_PRINT(F("write byte:\t")); TM1637_DEBUG_PRINTLN((char)byte);
 
   size_t n = 0;
   if ( _cursorPos == _numCols ) {
     shiftLeft(_rawBuffer, _numCols);
     _rawBuffer[_cursorPos] = encode( (char)byte );
+    // buffer, length, position
     printRaw( _rawBuffer, _numCols, 0);
     ++n;
   };
 
   if (_cursorPos < _numCols) {
     _rawBuffer[_cursorPos] = encode( (char)byte );
+    // buffer, length, position
     printRaw( _rawBuffer, _cursorPos+1, 0);
     setCursor(1, _cursorPos + 1);
     ++n;
@@ -172,15 +75,23 @@ size_t  SevenSegmentTM1637::write(const char* str) {
 
 // byte array with length
 size_t  SevenSegmentTM1637::write(const uint8_t* buffer, size_t size) {
-  TM1637_DEBUG_PRINT(F("write uint8_t*:\t")); TM1637_DEBUG_PRINT(buffer[0]);
+  TM1637_DEBUG_PRINT(F("write uint8_t*:\t("));
+  for(size_t i=0; i < size; i++) {
+    TM1637_DEBUG_PRINT((char)buffer[i]);
+    TM1637_DEBUG_PRINT(i == size -1?F(""):F(", "));
+  }
+  TM1637_DEBUG_PRINT(F(") "));
+  TM1637_DEBUG_PRINT(size);
+
   uint8_t encodedBytes[TM1637_MAX_CHARS];
 
   if ( size > TM1637_MAX_CHARS) {
     size = TM1637_MAX_CHARS;
   }
   size_t length = encode(encodedBytes, buffer, size);
-  TM1637_DEBUG_PRINT(F(" ")); TM1637_DEBUG_PRINTLN(encodedBytes[0], BIN);
-  printRaw(encodedBytes,length, _cursorPos);
+  TM1637_DEBUG_PRINT(F(" (")); TM1637_DEBUG_PRINT(length); TM1637_DEBUG_PRINT(F(", "));
+  TM1637_DEBUG_PRINT(_cursorPos); TM1637_DEBUG_PRINTLN(F(")"));
+  printRaw(encodedBytes, length, _cursorPos);
   return length;
 };
 
@@ -304,7 +215,6 @@ void  SevenSegmentTM1637::printRaw(uint8_t rawByte, uint8_t position) {
 };
 
 void  SevenSegmentTM1637::printRaw(const uint8_t* rawBytes, size_t length, uint8_t position) {
-
   // if fits on display
   if ( (length + position) <= _numCols) {
     uint8_t cmd[5] = {0, };
@@ -321,8 +231,8 @@ void  SevenSegmentTM1637::printRaw(const uint8_t* rawBytes, size_t length, uint8
         cmd[1] |= (_colonOn)?TM1637_COLON_BIT:0;
       }
     }
-    TM1637_DEBUG_PRINT(F("ADDR :\t")); TM1637_DEBUG_PRINTLN(cmd[0],BIN);
-    TM1637_DEBUG_PRINT(F("DATA0:\t")); TM1637_DEBUG_PRINTLN(cmd[1],BIN);
+    // TM1637_DEBUG_PRINT(F("ADDR :\t")); TM1637_DEBUG_PRINTLN(cmd[0],BIN);
+    // TM1637_DEBUG_PRINT(F("DATA0:\t")); TM1637_DEBUG_PRINTLN(cmd[1],BIN);
     command(cmd, length+1);                           // send to display
   }
   // does not fit on display, need to print with delay
@@ -350,7 +260,7 @@ uint8_t SevenSegmentTM1637::encode(char c) {
   if ( c < ' ') { // 32 (ASCII)
     return 0;
   }
-  return pgm_read_byte_near(asciiMap + c - ' ');
+  return pgm_read_byte_near(AsciiMap::map + c - ' ');
 };
 
 uint8_t SevenSegmentTM1637::encode(int16_t d) {
@@ -358,7 +268,7 @@ uint8_t SevenSegmentTM1637::encode(int16_t d) {
   if ( d > 9 || d < 0) {
     return 0;
   };
-  return pgm_read_byte_near(asciiMap + d + '0' - ' ');
+  return pgm_read_byte_near(AsciiMap::map + d + '0' - ' ');
 };
 
 size_t  SevenSegmentTM1637::encode(uint8_t* buffer, const char* str, size_t bufferSize) {

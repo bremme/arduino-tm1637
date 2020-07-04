@@ -5,7 +5,7 @@ SevenSegmentExtended::SevenSegmentExtended(uint8_t pinClk, uint8_t pinDIO) :
   SevenSegmentTM1637(pinClk, pinDIO)
 { };
 
-void SevenSegmentExtended::printTime(uint16_t t, bool blink) {
+void SevenSegmentExtended::printTime(uint16_t t, bool blink, uint16_t blinkDelay) {
   uint16_t max = 2359;
   t = ( t > max)?max:t;
 
@@ -15,7 +15,7 @@ void SevenSegmentExtended::printTime(uint16_t t, bool blink) {
   printTime(hour, min, blink);
 };
 
-void SevenSegmentExtended::printTime(uint8_t hour, uint8_t min, bool blink) {
+void SevenSegmentExtended::printTime(uint8_t hour, uint8_t min, bool blink, uint16_t blinkDelay) {
 
   bool colonWasOn = getColonOn();
   setColonOn(true);
@@ -31,16 +31,69 @@ void SevenSegmentExtended::printTime(uint8_t hour, uint8_t min, bool blink) {
 
   // turn colon off and on again
   if (blink) {
-    delay(TM1637_DEFAULT_BLINK_DELAY);
+    delay(blinkDelay);
     setColonOn(false);
     printRaw(buffer[1],1);
-    delay(TM1637_DEFAULT_BLINK_DELAY);
+    delay(blinkDelay);
     setColonOn(true);
     printRaw(buffer[1],1);
   }
 
   setColonOn(colonWasOn);
 
+};
+
+void SevenSegmentExtended::printNumber(int16_t number, bool zeroPadding, bool rollOver, bool alignRight) {
+  const int16_t maxNumber = 9999;
+  const int16_t minNumber = -999;
+  bool positive = true;
+
+  // get and store sign
+  if (number < 0) {
+    positive = false;
+  };
+
+  // roll over if rollOver is set to true
+  if (rollOver == true) {
+    if (positive == true) {
+      number = number % int16_t(10000);
+    } else {
+      number = -1 * ((-1 * number) % 1000);
+    }
+  // limit number by default
+  } else {
+    number = number > maxNumber?maxNumber:number;
+    number = number < minNumber?minNumber:number;
+  }
+
+  // clear the display first
+  clear();
+
+  // align left is the default behavior, just forward to print
+  if (alignRight == false) {
+    print(number);
+    return;
+  }
+
+  if (positive == false) {
+    number *= -1;
+    print("-");
+  }
+
+  if (number > 999) {
+    setCursor(0, 0);
+  } else if (number > 99) {
+    if (zeroPadding == true) {print('0');}
+    setCursor(0, 1);
+  } else if (number > 9) {
+    if (zeroPadding == true) {print(F("00"));}
+    setCursor(0, 2);
+  } else {
+    if (zeroPadding == true) {print(F("000"));}
+    setCursor(0, 3);
+  };
+
+  print(number);
 };
 
 // positive counter 0..99, negative counter 0..-9
@@ -54,10 +107,6 @@ void SevenSegmentExtended::printDualCounter(int8_t leftCounter, int8_t rightCoun
   leftCounter = (leftCounter < min)?min:leftCounter;
   rightCounter = (rightCounter > max)?max:rightCounter;
   rightCounter = (rightCounter < min)?min:rightCounter;
-
-//  Serial.println(leftCounter);
-//  Serial.println(rightCounter);
-
 
   bool colonWasOn = getColonOn();     // get current state
   setColonOn(true);                   // turn on the colon
