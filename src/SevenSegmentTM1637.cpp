@@ -33,16 +33,18 @@ SevenSegmentTM1637::SevenSegmentTM1637(uint8_t pinClk, uint8_t pinDIO) :
 // Print API ///////////////////////////////////////////////////////////////////
 // single byte
 size_t  SevenSegmentTM1637::write(uint8_t byte) {
-  TM1637_DEBUG_PRINT(F("write byte:\t")); TM1637_DEBUG_PRINTLN(byte);
+  TM1637_DEBUG_PRINT(F("write byte:\t")); TM1637_DEBUG_PRINTLN((char)byte);
 
   if ( _cursorPos == _numCols ) {
     shiftLeft(_rawBuffer, _numCols);
     _rawBuffer[_cursorPos] = encode( (char)byte );
+    // buffer, length, position
     printRaw( _rawBuffer, _numCols, 0);
   };
 
   if (_cursorPos < _numCols) {
     _rawBuffer[_cursorPos] = encode( (char)byte );
+    // buffer, length, position
     printRaw( _rawBuffer, _cursorPos+1, 0);
     setCursor(1, _cursorPos + 1);
   };
@@ -71,7 +73,7 @@ size_t  SevenSegmentTM1637::write(const char* str) {
 size_t  SevenSegmentTM1637::write(const uint8_t* buffer, size_t size) {
   TM1637_DEBUG_PRINT(F("write uint8_t*:\t("));
   for(size_t i=0; i < size; i++) {
-    TM1637_DEBUG_PRINT(buffer[i]);
+    TM1637_DEBUG_PRINT((char)buffer[i]);
     TM1637_DEBUG_PRINT(i == size -1?F(""):F(", "));
   }
   TM1637_DEBUG_PRINT(F(") "));
@@ -83,6 +85,8 @@ size_t  SevenSegmentTM1637::write(const uint8_t* buffer, size_t size) {
     size = TM1637_MAX_CHARS;
   }
   size_t length = encode(encodedBytes, buffer, size);
+  TM1637_DEBUG_PRINT(F(" (")); TM1637_DEBUG_PRINT(length); TM1637_DEBUG_PRINT(F(", "));
+  TM1637_DEBUG_PRINT(_cursorPos); TM1637_DEBUG_PRINTLN(F(")"));
   printRaw(encodedBytes, length, _cursorPos);
 };
 
@@ -218,8 +222,8 @@ void  SevenSegmentTM1637::printRaw(const uint8_t* rawBytes, size_t length, uint8
         cmd[1] |= (_colonOn)?TM1637_COLON_BIT:0;
       }
     }
-    TM1637_DEBUG_PRINT(F("ADDR :\t")); TM1637_DEBUG_PRINTLN(cmd[0],BIN);
-    TM1637_DEBUG_PRINT(F("DATA0:\t")); TM1637_DEBUG_PRINTLN(cmd[1],BIN);
+    // TM1637_DEBUG_PRINT(F("ADDR :\t")); TM1637_DEBUG_PRINTLN(cmd[0],BIN);
+    // TM1637_DEBUG_PRINT(F("DATA0:\t")); TM1637_DEBUG_PRINTLN(cmd[1],BIN);
     command(cmd, length+1);                           // send to display
   }
   // does not fit on display, need to print with delay

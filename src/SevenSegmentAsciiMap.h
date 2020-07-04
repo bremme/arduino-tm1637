@@ -3,12 +3,6 @@
 
 #include <Arduino.h>
 
-// #if (defined(__AVR__))
-//   #include <avr/pgmspace.h> // Used for PROGMEM (arduino)
-// #else
-//   #include <pgmspace.h> // Used for PROGMEM (esp8266)
-// #endif
-
 // ASCII MAPPINGS
 #define TM1637_CHAR_SPACE       B00000000 // 32  (ASCII)
 #define TM1637_CHAR_EXC         B00000110

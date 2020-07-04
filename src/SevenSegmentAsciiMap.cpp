@@ -1,8 +1,7 @@
 #include "SevenSegmentAsciiMap.h"
 
 // store an ASCII Map in PROGMEM (Flash memory)
-// const PROGMEM uint8_t asciiMap[] = {
-const PROGMEM uint8_t AsciiMap::map[] = {
+const uint8_t AsciiMap::map[] PROGMEM = {
   TM1637_CHAR_SPACE,
   TM1637_CHAR_EXC,
   TM1637_CHAR_D_QUOTE,
