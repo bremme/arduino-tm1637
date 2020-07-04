@@ -101,7 +101,7 @@ For more extended information on what arguments all above functions accept and r
 
 # Changelog
 
-+ 22-06-2020 version 1.1.0
++ 04-07-2020 version 1.1.0
   + Improved `printLevelVertical()` using [pablo-lp](https://github.com/pablo-lp) suggestions
     + The default `printLevelVertical()` can diplay twice the number of levels now (e.g. 9 levels for a defaulf 4 digit display)
   + Add configurable blink delay when using the `printTime` methods (thanks to [simoneluconi](https://github.com/simoneluconi))
