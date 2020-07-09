@@ -101,6 +101,9 @@ For more extended information on what arguments all above functions accept and r
 
 # Changelog
 
++ 09-07-2020 version 1.1.1
+  + Bug fixes
+    + fixed a typo in SevenSegmentFun.h file
 + 04-07-2020 version 1.1.0
   + Improved `printLevelVertical()` using [pablo-lp](https://github.com/pablo-lp) suggestions
     + The default `printLevelVertical()` can diplay twice the number of levels now (e.g. 9 levels for a defaulf 4 digit display)
