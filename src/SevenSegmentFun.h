@@ -55,7 +55,7 @@ class SevenSegmentFun : public SevenSegmentExtended {
     void nightrider(uint8_t repeats = 10, uint16_t d = TM1637_NIGHTRIDER_DEFAULT_DELAY, uint8_t symbol = TM1637_CHAR_VERT_LEVEL_II);
     void bombTimer(uint8_t hours, uint8_t min, uint16_t speed = 60);
     void bombTimer(uint8_t hours, uint8_t min, uint16_t speed, char* str);
-    void bouchingBall(uint16_t moves, uint16_t d, bool runForever = false);
+    void bouncingBall(uint16_t moves, uint16_t d, bool runForever = false);
     void printBall(const int8_t x, const int8_t y);
     void print4Bit(const uint8_t x, const uint8_t y, uint8_t symbol);
 
