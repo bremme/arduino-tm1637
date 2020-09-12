@@ -54,14 +54,14 @@ size_t  SevenSegmentTM1637::write(uint8_t byte) {
 // null terminated char array
 size_t  SevenSegmentTM1637::write(const char* str) {
   TM1637_DEBUG_PRINT(F("write char*:\t")); TM1637_DEBUG_PRINTLN(str);
-  uint8_t encodedBytes[4];
+  uint8_t encodedBytes[TM1637_MAX_COLOM];
 
-  encode(encodedBytes, str, 4);
-  uint8_t i =4;
+  encode(encodedBytes, str, TM1637_MAX_COLOM);
+  uint8_t i = TM1637_MAX_COLOM;
   while( str[i] != '\0' ) {
     printRaw(encodedBytes);
-    shiftLeft(encodedBytes, 4);
-    encodedBytes[3] = encode( str[i] );
+    shiftLeft(encodedBytes, TM1637_MAX_COLOM);
+    encodedBytes[TM1637_MAX_COLOM-1] = encode( str[i] );
     i++;
     if ( i == TM1637_MAX_CHARS) {
       break;
@@ -102,7 +102,7 @@ void SevenSegmentTM1637::init(uint8_t cols, uint8_t rows) {
 }
 
 void SevenSegmentTM1637::clear(void) {
-  uint8_t rawBytes[4] = {0,0,0,0};
+  uint8_t rawBytes[TM1637_MAX_COLOM] = {0,0,0,0};
   printRaw(rawBytes);
   home();
 };
@@ -228,13 +228,13 @@ void  SevenSegmentTM1637::printRaw(const uint8_t* rawBytes, size_t length, uint8
   }
   // does not fit on display, need to print with delay
   else {
-    // First print 1-4 characters
+    // First print 1-(TM1637_MAX_COLOM-1) characters
     uint8_t numtoPrint = _numCols - position;
     printRaw(rawBytes, numtoPrint, position);
     delay(_printDelay);
 
     // keep printing 4 characters till done
-    uint8_t remaining = length - numtoPrint + 3;
+    uint8_t remaining = length - numtoPrint + TM1637_MAX_COLOM - 1;
     uint8_t i         = 1;
     while( remaining >= _numCols) {
       printRaw(&rawBytes[i], _numCols, 0);
