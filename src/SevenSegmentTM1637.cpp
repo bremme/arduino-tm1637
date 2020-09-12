@@ -124,7 +124,7 @@ void SevenSegmentTM1637::setBacklight(uint8_t value) {
   // scale backlight value to 0..8
   value /= 10;                          // 0..10
   value = (value > 8   )?  8:value;     // only 8 levels and off
-  uint8_t cmd = TM1637_COM_SET_DISPLAY;;
+  uint8_t cmd = TM1637_COM_SET_DISPLAY;
   switch ( value ) {
     case 0:
       cmd |= TM1637_SET_DISPLAY_OFF;
