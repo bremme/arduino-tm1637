@@ -97,7 +97,7 @@ void SevenSegmentExtended::printNumber(int16_t number, bool zeroPadding, bool ro
 };
 
 // positive counter 0..99, negative counter 0..-9
-void SevenSegmentExtended::printDualCounter(int8_t leftCounter, int8_t rightCounter, bool zeroPadding) {
+void SevenSegmentExtended::printDualCounter(int8_t leftCounter, int8_t rightCounter, bool zeroPadding, bool setColonOn) {
 
   int8_t max = 99;
   int8_t min = -9;
@@ -109,7 +109,8 @@ void SevenSegmentExtended::printDualCounter(int8_t leftCounter, int8_t rightCoun
   rightCounter = (rightCounter < min)?min:rightCounter;
 
   bool colonWasOn = getColonOn();     // get current state
-  setColonOn(true);                   // turn on the colon
+  if (setColonOn)
+    SevenSegmentTM1637::setColonOn(true); // turn on the colon
   home();                             // set cursor to zero
 
   if ( leftCounter < 10 && leftCounter >= 0) {
@@ -136,5 +137,5 @@ void SevenSegmentExtended::printDualCounter(int8_t leftCounter, int8_t rightCoun
   print(rightCounter);
 
   // set to previous state
-  setColonOn(colonWasOn);
+  SevenSegmentTM1637::setColonOn(colonWasOn);
 };
