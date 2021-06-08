@@ -82,7 +82,7 @@ If you use any of these super classes, you will also get all the basic, advanced
 * `printLevelHorizontal(levels[])` Prints 4 horizontal levels e.g. equalizer
 * `scrollingText()`             Prints text and (keeps) scrolling
 * `snake()`                     Classic snake demo
-* `nightrider()`                Nightrider Kit demo
+* `knightrider()`               Knight Rider KITT demo (aka Larson Scanner)
 * `bombTimer()`                 Count down a (bomb) timer
 * `bouncingBall()`              Bouncing ball demo
 

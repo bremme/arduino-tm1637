@@ -44,6 +44,7 @@ printLevelVertical	KEYWORD2
 printLevelHorizontal	KEYWORD2
 scrollingText	KEYWORD2
 snake	KEYWORD2
+knightrider	KEYWORD2
 nightrider	KEYWORD2
 bombTimer	KEYWORD2
 bouchingBall	KEYWORD2

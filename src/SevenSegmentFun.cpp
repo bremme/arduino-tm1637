@@ -54,7 +54,7 @@ void  SevenSegmentFun::printLevelVertical(uint8_t level, bool leftToRight, uint8
 
 };
 
-void  SevenSegmentFun::nightrider(uint8_t repeats, uint16_t d, uint8_t symbol) {
+void  SevenSegmentFun::knightrider(uint8_t repeats, uint16_t d, uint8_t symbol) {
 
   uint8_t buffer[((TM1637_MAX_COLOM * 2) - 1)] = {0, };
 
@@ -77,6 +77,11 @@ void  SevenSegmentFun::nightrider(uint8_t repeats, uint16_t d, uint8_t symbol) {
     };
   }
 }
+
+void  SevenSegmentFun::nightrider(uint8_t repeats, uint16_t d, uint8_t symbol) {
+  knightrider(repeats, d, symbol);
+}
+
 // 5 levels ( 0, 33, 66, 100)
 void  SevenSegmentFun::printLevelHorizontal( uint8_t levels[4] ) {
   for (uint8_t i=0; i < TM1637_MAX_COLOM;i++) {
