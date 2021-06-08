@@ -52,6 +52,7 @@ class SevenSegmentFun : public SevenSegmentExtended {
     void printLevelHorizontal(uint8_t levels[4]);
     void scrollingText(const char* str, uint8_t repeats);
     void snake(uint8_t repeats = 1, uint16_t d = TM1637_SNAKE_DEFAULT_DELAY);
+    void knightrider(uint8_t repeats = 10, uint16_t d = TM1637_NIGHTRIDER_DEFAULT_DELAY, uint8_t symbol = TM1637_CHAR_VERT_LEVEL_II);
     void nightrider(uint8_t repeats = 10, uint16_t d = TM1637_NIGHTRIDER_DEFAULT_DELAY, uint8_t symbol = TM1637_CHAR_VERT_LEVEL_II);
     void bombTimer(uint8_t hours, uint8_t min, uint16_t speed = 60);
     void bombTimer(uint8_t hours, uint8_t min, uint16_t speed, char* str);
