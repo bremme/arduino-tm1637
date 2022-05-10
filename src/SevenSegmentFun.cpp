@@ -24,9 +24,9 @@ void  SevenSegmentFun::printLevelVertical(uint8_t level, bool leftToRight) {
   uint8_t d = leftToRight == true?0:TM1637_MAX_COLOM-1;
 
   for (uint8_t i=0; i < TM1637_MAX_COLOM; i++) {
-    if (barsOn - (2 * (i + 1)) >= 0) {
+    if (barsOn - (2 * i) >= 2) {
       _rawBuffer[d] = TM1637_CHAR_VERT_LEVEL_II;
-    } else if (barsOn - (2 * (i + 1)) >= 1) {
+    } else if (barsOn - (2 * i) >= 1) {
       _rawBuffer[d] = (leftToRight == true)?TM1637_CHAR_VERT_LEVEL_I0:TM1637_CHAR_VERT_LEVEL_0I;
     } else {
       _rawBuffer[d] = 0;
