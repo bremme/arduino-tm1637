@@ -55,10 +55,10 @@ void loop() {
   byte repeats = 2;
   display.scrollingText("ARDUINO TM1637 FUN", repeats);
 
-  // nightrider
-  introDuceNextDemo("REMEMBER KIT? NIGHTRIDER DEMO");
+  // knightrider
+  introDuceNextDemo("REMEMBER KITT? KNIGHT RIDER DEMO");
   repeats = 4;
-  display.nightrider(repeats);
+  display.knightrider(repeats);
 
   // snake
   introDuceNextDemo("SNAKE DEMO");
