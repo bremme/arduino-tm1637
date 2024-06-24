@@ -37,8 +37,9 @@ void    printNumber(int16_t number, bool zeroPadding = false, bool rollOver = fa
 @param [in] leftCounter   the number on the left side of the display
 @param [in] rightcounter  the numnber on the right side of the display
 @param [in] zeroPadding   optional: pad counters with zero
+@param [in] setColonOn    optional: set to false to leave colon alone
 */
-void    printDualCounter(int8_t leftCounter, int8_t rightCounter, bool zeroPadding = false);
+void    printDualCounter(int8_t leftCounter, int8_t rightCounter, bool zeroPadding = false, bool setColonOn = true);
 
 };
 #endif
