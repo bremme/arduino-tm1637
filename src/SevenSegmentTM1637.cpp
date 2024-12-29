@@ -107,6 +107,7 @@ void SevenSegmentTM1637::init(uint8_t cols, uint8_t rows) {
 }
 
 void SevenSegmentTM1637::clear(void) {
+  setColonOn(false);
   uint8_t rawBytes[4] = {0,0,0,0};
   printRaw(rawBytes);
   home();
