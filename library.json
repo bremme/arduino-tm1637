@@ -1,0 +1,54 @@
+{
+  "name": "SevenSegmentTM1637",
+  "version": "1.1.2",
+  "description": "Library for using a 4 digit seven segment display with TM1636 or TM1637 driver IC",
+  "keywords": [
+    "display",
+    "seven-segment",
+    "tm1637",
+    "tm1636",
+    "lcd",
+    "led",
+    "arduino"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kolod/SevenSegmentTM1637.git"
+  },
+  "authors": [
+    {
+      "name": "Bram Harmsen",
+      "email": "bramharmsen@gmail.com",
+      "maintainer": false
+    },
+    {
+      "name": "Oleksandr Kolodkin",
+      "email": "oleksandr.kolodkin@ukr.net",
+      "maintainer": true
+    }
+  ],
+  "license": "GPL-2.0",
+  "homepage": "https://github.com/kolod/SevenSegmentTM1637",
+  "frameworks": "arduino",
+  "platforms": "*",
+  "headers": "SevenSegmentTM1637.h",
+  "dependencies": [],
+  "examples": [
+    "examples/Basic/Basic.ino",
+    "examples/ExtClock/ExtClock.ino",
+    "examples/ExtScoreboard/ExtScoreboard.ino",
+    "examples/FunPrintAll/FunPrintAll.ino",
+    "examples/FunPrintLevel/FunPrintLevel.ino",
+    "examples/LowLevel/LowLevel.ino",
+    "examples/PrintNumber/PrintNumber.ino",
+    "examples/SerialPrint/SerialPrint.ino"
+  ],
+  "export": {
+    "include": [
+      "src/*",
+      "examples/*",
+      "LICENSE",
+      "README.md"
+    ]
+  }
+}
